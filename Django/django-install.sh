@@ -55,7 +55,7 @@ echo "Django admin is version:"
 django-admin --version
 django-admin startproject project1
 
-yum -y install tree
+sudo yum -y install tree
 
 echo "This is the new django project directory..."
 

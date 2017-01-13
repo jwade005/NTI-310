@@ -61,4 +61,4 @@ echo "This is the new django project directory..."
 
 tree project1
 
-echo "Use 'python manage.py runserver 0.0.0.0:8000' to start the Django server."
+echo "Use '/opt/django/django-env/bin/python manage.py runserver 0.0.0.0:800' to start the Django server."

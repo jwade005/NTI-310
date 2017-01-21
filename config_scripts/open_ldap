@@ -11,13 +11,19 @@ systemctl enable slapd
 systemctl start slapd
 
 yum -y install httpd
+
+systemctl enable httpd #jw
+systemctl start httpd #jw
+
 yum -y install epel-release
 yum -y install phpldapadmin
+#configure ldap admin? jw
+
 # some source editing
 # Tell SE linux what's going on, so that it doesn't freek
 setsebool -P httpd_can_connect_ldap on
 
-
+systemctl restart httpd #jw
 
 
 # decent config guide: http://www.itzgeek.com/how-tos/linux/centos-how-tos/install-configure-phpldapadmin-centos-7-ubuntu-16-04.html

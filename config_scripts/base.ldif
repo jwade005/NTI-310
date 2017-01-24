@@ -1,0 +1,17 @@
+dn: dc=jwade,dc=local
+dc: jwade
+objectClass: top
+objectClass: domain
+
+dn: cn=ldapadm ,dc=jwade,dc=local
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+
+dn: ou=People,dc=jwade,dc=local
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Group,dc=jwade,dc=local
+objectClass: organizationalUnit
+ou: Group

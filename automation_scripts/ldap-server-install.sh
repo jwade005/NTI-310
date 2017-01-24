@@ -74,14 +74,14 @@ sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
 
 #add the cosine and nis LDAP schemas
 
-ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
-ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
-ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 #create base.ldif file for domain
 
 cp /nti-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
-ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
+sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f base.ldif
 
 #install tcl tk packages
 
@@ -102,5 +102,5 @@ sudo make install && ln -svf expect5.45/libexpect5.45.so /usr/lib
 
 #build the directory structure
 
-ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
+sudo ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
 ./expect.exp

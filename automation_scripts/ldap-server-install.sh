@@ -102,5 +102,5 @@ sudo make install && ln -svf expect5.45/libexpect5.45.so /usr/lib
 
 #build the directory structure
 
-sudo ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
+sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f base.ldif
 ./expect.exp

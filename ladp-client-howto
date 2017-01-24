@@ -1,0 +1,151 @@
+Update & ldap-client Ubuntu
+
+#update Ubuntu desktop first
+
+sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
+
+#Install ldap client
+
+sudo apt-get install libpam-ldap nscd
+
+#Configure:
+
+    * LDAP server Uniform Resource Identifier: ldap://LDAP-server-IP-Address
+        * Change the initial string from "ldapi:///" to "ldap://" before inputing your server's information
+    * Distinguished name of the search base:
+        * This should match the value you put in your LDAP server's /etc/phpldapadmin/config.phpfile.
+        * Search for: " 'server','base',array " within the file.
+        * Our example was "dc=XXX,dc=XXX”
+    * LDAP version to use: 3 
+    * Make local root Database admin: Yes 
+    * Does the LDAP database require login? No 
+    * LDAP account for root:
+        * This should also match the value in your /etc/phpldapadmin/config.php.
+        * Search for: " 'login','bind_id' " within the file
+        * Our example was "cn=admin,dc=test,dc=com"
+    * LDAP root account password: Your-LDAP-root-password 
+
+
+#Set up /etc/nsswitch.conf to use ldap lookups by running:
+
+JPuppy@ubuntu-desktop:~$ sudo vi /etc/nsswitch.conf
+
+JPuppy@ubuntu-desktop:~$ cat /etc/nsswitch.conf
+# /etc/nsswitch.conf
+#
+# Example configuration of GNU Name Service Switch functionality.
+# If you have the `glibc-doc-reference' and `info' packages installed, try:
+# `info libc "Name Service Switch"' for information about this file.
+
+passwd:         ldap compat		<— add ldap
+group:            ldap compat		<— add ldap
+shadow:         ldap compat		<— add ldap
+gshadow:       files
+
+hosts:          files mdns4_minimal [NOTFOUND=return] dns myhostname
+networks:       files
+
+protocols:      db files
+services:       db files
+ethers:         db files
+rpc:            db files
+
+netgroup:       nis
+JPuppy@ubuntu-desktop:~$ 
+
+#Configure pam  
+
+JPuppy@ubuntu-desktop:~$ sudo nano /etc/pam.d/common-session
+
+#This will create a home directory on the client machine when an LDAP user logs in who does not have a home directory.
+Add this line to the bottom of the file: 	session required    pam_mkhomedir.so skel=/etc/skel umask=0022
+
+#restart nscd service
+JPuppy@ubuntu-desktop:~$ sudo /etc/init.d/nscd restart
+[ ok ] Restarting nscd (via systemctl): nscd.service.
+
+#configure admin access
+
+#I created a group called "admin" after building the ldap server. It coincides with the "admin" group that is created by default on Ubuntu #machines. The following limits admin access:
+
+#opens config file for admin rights
+JPuppy@ubuntu-desktop:~$ sudo visudo
+
+  GNU nano 2.5.3                         File: /etc/sudoers.tmp                                                         
+
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+
+# Members of the admin group may gain root privileges
+#%admin ALL=(ALL) ALL									<— comment out this line
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "#include" directives:
+
+#includedir /etc/sudoers.d
+JPuppy ALL=NOPASSWD: ALL
+jwade005 ALL=NOPASSWD: ALL
+
+#adjust sshd config file in the cloud image
+
+#sshd_config lives in /etc/ssh/sshd_config
+
+#comment out the following lines:
+78c78
+< #PasswordAuthentication no
+---
+> PasswordAuthentication no
+82c82
+< #ChallengeResponseAuthentication no
+---
+> ChallengeResponseAuthentication no
+
+#restart the sshd service
+
+JPuppy@ubuntu-desktop:/etc/ssh$ sudo systemctl restart sshd.service
+JPuppy@ubuntu-desktop:/etc/ssh$ su jadmin
+Password: 
+
+
+#create a user through phpldapadmin and login
+
+Last login: Sun Jan 22 18:27:59 on ttys002
+Jonathans-MacBook-Pro:~ JPuppy$ ssh jadmin@104.196.246.95	<— “ssh username@<ldapserverIP>”
+Password: 
+Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-59-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+0 packages can be updated.
+0 updates are security updates.
+
+*** System restart required ***
+Last login: Mon Jan 23 01:45:01 2017 from 50.132.85.254
+$ 
+
+

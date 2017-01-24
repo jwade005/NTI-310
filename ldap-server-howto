@@ -1,0 +1,293 @@
+ldap config
+
+Install and start ldap, http, ldapadmin
+
+#!/bin/bash
+#https://www.server-world.info/en/note?os=CentOS_7&p=openldap
+#This is a basis for students to create a fully functioning build, compile, and deploy script.
+
+yum -y install openldap-servers openldap-clients
+
+cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG 
+chown ldap. /var/lib/ldap/DB_CONFIG
+
+systemctl enable slapd
+systemctl start slapd
+
+yum -y install httpd
+
+systemctl enable httpd #jw
+systemctl start httpd #jw
+
+yum -y install epel-release
+yum -y install phpldapadmin
+#configure ldap admin? jw
+
+# some source editing
+# Tell SE linux what's going on, so that it doesn't freek
+setsebool -P httpd_can_connect_ldap on
+
+systemctl restart httpd #jw
+
+
+# decent config guide: http://www.itzgeek.com/how-tos/linux/centos-how-tos/install-configure-phpldapadmin-centos-7-ubuntu-16-04.html
+
+
+
+#Note: LDAP comes up completely insecure, with Anonymous login enabled by default... this is not a good and happy thing, so fix 
+#it in the config file
+#(prompt for user input), the following is currently a manual config, but could be automated fairly easily
+#slappasswd
+#open tcp port 389
+#
+
+Server Side
+
+slappasswd
+
+ldapP@ssw0rd1
+
+root
+
+{SSHA}k6xdeHueM8qRtB4JXe/qCk7H6l6ktHdi
+
+ldap manager
+
+{SSHA}XIUnc2+UBmhmM9CwvD7IqCmH4yBJ99HU
+
+modified /etc/openldap/slapd.d/db.ldif file: configure dc=xxx,dc=xxx and add SSHA hash value
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=jwade,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=ldapadm,dc=jwade,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: {SSHA}g4swWPbIesYnD9gF0PlOz1myuGUgogl8
+
+#send the configuration to the LDAP server
+
+ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
+
+
+Make a changes to /etc/openldap/slapd.d/cn=config/olcDatabase={1}monitor.ldif (Do not edit manually) file to restrict the monitor access only to ldap root (ldapadm) user not to others.
+# vi monitor.ldif
+
+dn: olcDatabase={1}monitor,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth" read by dn.base="cn=ldapadm,dc=jwade,dc=local" read by * none
+
+[root@ldap-server slapd.d]# vi monitor.ldif
+[root@ldap-server slapd.d]# ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+modifying entry "olcDatabase={1}monitor,cn=config"
+
+[root@ldap-server slapd.d]# 
+
+#send the configuration to the LDAP server
+
+ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
+
+
+Create ldap certificate
+
+openssl req -new -x509 -nodes -out /etc/openldap/certs/jwadeldapcert.pem -keyout /etc/openldap/certs/jwadeldapkey.pem -days 365
+
+Generating a 2048 bit RSA private key
+...+++
+.....................................+++
+writing new private key to '/etc/openldap/certs/jwadeldapkey.pem'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]: US
+State or Province Name (full name) []: WA
+Locality Name (eg, city) [Default City]: SEATTLE
+Organization Name (eg, company) [Default Company Ltd]:jwade
+Organizational Unit Name (eg, section) []:nti310
+Common Name (eg, your name or your server's hostname) []:ldap-server
+Email Address []:jwade005@seattlecentral.edu
+
+Change ownership of cert to ldap and verify
+
+[root@ldap-server certs]# chown -R ldap:ldap /etc/openldap/certs/*.pem
+[root@ldap-server certs]# ll /etc/openldap/certs/*.pem
+-rw-r--r--. 1 ldap ldap 1452 Jan 21 18:04 /etc/openldap/certs/jwadeldapcert.pem
+-rw-r--r--. 1 ldap ldap 1704 Jan 21 18:04 /etc/openldap/certs/jwadeldapkey.pem
+
+Create certs.ldif file to configure LDAP to use secure communication using a self-signed certificate
+
+# vi certs.ldif
+
+dn: cn=config
+changetype: modify
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/openldap/certs/jwadeldapcert.pem
+
+dn: cn=config
+changetype: modify
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/openldap/certs/jwadeldapkey.pem
+
+Import the configurations to LDAP server
+
+[root@ldap-server slapd.d]# ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+modifying entry "cn=config"
+
+modifying entry "cn=config"
+
+Test Configuration
+
+[root@ldap-server slapd.d]# slaptest -u
+config file testing succeeded
+
+Copy the sample database configuration file to /var/lib/ldap and update the file permissions
+
+[root@ldap-server ~]# cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+cp: overwrite ‘/var/lib/ldap/DB_CONFIG’? y
+[root@ldap-server ~]# chown ldap:ldap /var/lib/ldap/*
+[root@ldap-server ~]# 
+
+Add the cosine and nis LDAP schemas
+
+[root@ldap-server ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry "cn=cosine,cn=schema,cn=config"
+
+[root@ldap-server ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry "cn=nis,cn=schema,cn=config"
+
+[root@ldap-server ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+SASL/EXTERNAL authentication started
+SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
+SASL SSF: 0
+adding new entry "cn=inetorgperson,cn=schema,cn=config"
+
+Generate base.ldif file for jwade domain
+
+[root@ldap-server slapd.d]# vi base.ldif
+
+dn: dc=jwade,dc=local
+dc: jwade
+objectClass: top
+objectClass: domain
+
+dn: cn=ldapadm ,dc=jwade,dc=local
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+
+dn: ou=People,dc=jwade,dc=local
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Group,dc=jwade,dc=local
+objectClass: organizationalUnit
+ou: Group
+
+Build the directory structure (When prompted for password, use root password created earlier.)
+
+[root@ldap-server slapd.d]# 	Enter LDAP Password: 
+adding new entry "dc=jwade,dc=local"
+
+adding new entry "cn=ldapadm ,dc=jwade,dc=local"
+
+adding new entry "ou=People,dc=jwade,dc=local"
+
+adding new entry "ou=Group,dc=jwade,dc=local"
+
+In CentOS 7, web access is managed by mod_authz_core.c module; so regular allow or deny rules won’t work even if you modify.
+
+# vi /etc/httpd/conf.d/phpldapadmin.conf
+
+Update the configuration file shown like below. 
+
+Alias /phpldapadmin /usr/share/phpldapadmin/htdocs
+Alias /ldapadmin /usr/share/phpldapadmin/htdocs
+
+usr/share/phpldapadmin/htdocs>
+  <IfModule mod_authz_core.c>
+    # Apache 2.4
+    # Require local				<— hash out
+    Require all granted				<— ADD line
+  IfModule>
+  <IfModule !mod_authz_core.c>
+    # Apache 2.2
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+    Allow from ::1
+  </IfModule>
+</Directory>
+
+Restart apache service
+
+# systemctl restart httpd.service
+
+Configure built-in SElinux firewall to allow access
+
+[root@ldap-server ~]# firewall-cmd --permanent --zone=public --add-service=http
+success
+[root@ldap-server ~]# firewall-cmd --reload
+success
+[root@ldap-server ~]# 
+
+
+Check by navigating to: http://<server IP address>/ldapadmin
+
+￼
+SUCCESS!! :) 
+
+To log in to ldap admin
+
+[root@ldap-server etc]# cd phpldapadmin
+[root@ldap-server phpldapadmin]# vi config.php
+
+Modify the following lines in the config.php file in the /etc/phpldapadmin directory to use the root login created earlier
+
+# line 397: uncomment, line 398: comment out
+$servers->setValue('login','attr','dn');
+// $servers->setValue('login','attr','uid');
+
+
+
+#Use distinguished name (dn) for login (cn=xxx,dc=xxx,dc=xxx)
+
+￼
+
+
+#add users and groups 
+
+￼
+
+#Disable anonymous login to ldapadmin
+
+root@ldap-server ~]# cd /etc/phpldapadmin
+[root@ldap-server phpldapadmin]# vi config.php
+
+/* Enable anonymous bind login. */
+$servers->setValue('login','anon_bind',false);		<— remove ‘//‘ and change true to false
+

@@ -210,7 +210,8 @@ ou: Group
 
 Build the directory structure (When prompted for password, use root password created earlier.)
 
-[root@ldap-server slapd.d]# 	Enter LDAP Password: 
+[root@ldap-server slapd.d]# ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
+Enter LDAP Password: 
 adding new entry "dc=jwade,dc=local"
 
 adding new entry "cn=ldapadm ,dc=jwade,dc=local"

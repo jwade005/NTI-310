@@ -49,11 +49,11 @@ ldapP@ssw0rd1
 
 root
 
-{SSHA}k6xdeHueM8qRtB4JXe/qCk7H6l6ktHdi
+{SSHA}xxxxxxxxxxxxx
 
 ldap manager
 
-{SSHA}XIUnc2+UBmhmM9CwvD7IqCmH4yBJ99HU
+{SSHA}xxxxxxxxxxxxx
 
 modified /etc/openldap/slapd.d/db.ldif file: configure dc=xxx,dc=xxx and add SSHA hash value
 
@@ -70,7 +70,7 @@ olcRootDN: cn=ldapadm,dc=jwade,dc=local
 dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 replace: olcRootPW
-olcRootPW: {SSHA}g4swWPbIesYnD9gF0PlOz1myuGUgogl8
+olcRootPW: {SSHA}xxxxxxxxxxxxxxxx
 
 #send the configuration to the LDAP server
 

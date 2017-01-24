@@ -1,0 +1,3 @@
+#!/usr/bin/expect
+expect "Enter LDAP Password:"
+send "ldapP@ssw0rd1"

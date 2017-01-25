@@ -5,9 +5,12 @@
 #install git
 
 sudo yum -y install git
-sudo git clone https://github.com/jwade005/NTI-310.git
+sudo git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
 sudo git config --global user.name "jwade005"
 sudo git config --global user.email "jwade005@seattlecentral.edu"
+
+#make NTI-310 directory accessible
+#sudo chmod -R 777 /home/Jonathan/NTI-310
 
 #install ldap
 
@@ -40,17 +43,18 @@ sudo yum -y install phpldapadmin
 #allow http connection to ldap
 
 sudo setsebool -P httpd_can_connect_ldap on
+sleep 5
 
 #copy db.ldif and add to config
 
-sudo sh -c '/NTI-310/config_scripts/db.ldif > /etc/openldap/slapd.d/db.ldif'
+sudo cp /tmp/NTI-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
 
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
 sleep 5
 
 #copy monitor.ldif and add to config
 
-sudo sh -c '/NTI-310/config_scripts/monitor.ldif > /etc/openldap/slapd.d/monitor.ldif'
+sudo cp /tmp/NTI-310/config_scripts/monitor.ldif /etc/openldap/slapd.d/monitor.ldif
 sudo chown ldap. /etc/openldap/slapd.d/monitor.ldif
 
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
@@ -58,7 +62,7 @@ sleep 5
 
 #create ssl cert
 
-sudo sh -c '/NTI-310/config_scripts/create_ldap_ssl.sh > /etc/openldap/certs/create_ldap_ssl.sh'
+sudo cp /tmp/NTI-310/config_scripts/create_ldap_ssl.sh /etc/openldap/certs/create_ldap_ssl.sh
 sudo ./etc/openldap/certs/create_ldap_ssl.sh
 
 echo "Key and Cert created in /etc/openldap/certs"
@@ -70,7 +74,7 @@ sudo ll /etc/openldap/certs/*.pem
 
 #copy cert ldif and add to config
 
-sudo sh -c '/NTI-310/config_scripts/certs.ldif > /etc/openldap/slapd.d/certs.ldif'
+sudo cp /tmp/NTI-310/config_scripts/certs.ldif /etc/openldap/slapd.d/certs.ldif
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
 
 #add the cosine and nis LDAP schemas
@@ -81,14 +85,14 @@ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 #create base.ldif file for domain
 
-sudo sh -c '/NTI-310/config_scripts/base.ldif > /etc/openldap/slapd.d/base.ldif'
+sudo cp /tmp/NTI-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
 sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f base.ldif
 
 #enter ldapadmin password
 
 echo -e "ldapP@ssw0rd1" \r #needs to be encrypted
 
-sudo sh -c '/NTI-310/config_scripts/phpldapadmin.conf > /etc/httpd/conf.d/phpldapadmin.conf'
+sudo cp /tmp/NTI-310/config_scripts/phpldapadmin.conf /etc/httpd/conf.d/phpldapadmin.conf
 
 #restart htttpd service
 

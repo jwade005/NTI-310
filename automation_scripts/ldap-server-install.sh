@@ -43,21 +43,22 @@ setsebool -P httpd_can_connect_ldap on
 
 #copy db.ldif and add to config
 
-sudo cp /nti-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
+sudo cat /nti-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
 
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
 sleep 5
 
 #copy monitor.ldif and add to config
 
-sudo cp /nti-310/config_scripts/monitor.ldif /etc/openldap/slapd.d/monitor.ldif
+sudo cat /nti-310/config_scripts/monitor.ldif /etc/openldap/slapd.d/monitor.ldif
+sudo chown ldap. /etc/openldap/slapd.d/monitor.ldif
 
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
 sleep 5
 
 #create ssl cert
 
-sudo cp /nti-310/config_scripts/create_ldap_ssl.sh /etc/openldap/certs/create_ldap_ssl.sh
+sudo cat /nti-310/config_scripts/create_ldap_ssl.sh /etc/openldap/certs/create_ldap_ssl.sh
 sudo ./etc/openldap/certs/create_ldap_ssl.sh
 
 echo "Key and Cert created in /etc/openldap/certs"
@@ -69,7 +70,7 @@ sudo ll /etc/openldap/certs/*.pem
 
 #copy cert ldif and add to config
 
-sudo cp /nti-310/config_scripts/certs.ldif /etc/openldap/slapd.d/certs.ldif
+sudo cat /nti-310/config_scripts/certs.ldif /etc/openldap/slapd.d/certs.ldif
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
 
 #add the cosine and nis LDAP schemas
@@ -80,9 +81,20 @@ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 #create base.ldif file for domain
 
-sudo cp /nti-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
+sudo cat /nti-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
 sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f base.ldif
 
 #enter ldapadmin password
 
-echo -e "{SSHA}g4swWPbIesYnD9gF0PlOz1myuGUgogl8" \r
+echo -e "ldapP@ssw0rd1" \r #needs to be encrypted
+
+sudo cat /nti-310/config_scripts/phpldapadmin.conf /etc/httpd/conf.d/phpldapadmin.conf
+
+#restart htttpd service
+
+sudo systemctl restart httpd.service
+
+#configure firewall to allow access
+
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --reload

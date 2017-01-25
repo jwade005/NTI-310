@@ -49,7 +49,7 @@ sleep 5
 
 sudo cp /tmp/NTI-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
 
-sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f db.ldif
+sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/db.ldif
 sleep 5
 
 #copy monitor.ldif and add to config
@@ -57,13 +57,13 @@ sleep 5
 sudo cp /tmp/NTI-310/config_scripts/monitor.ldif /etc/openldap/slapd.d/monitor.ldif
 sudo chown ldap. /etc/openldap/slapd.d/monitor.ldif
 
-sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f monitor.ldif
+sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/monitor.ldif
 sleep 5
 
 #create ssl cert
 
 sudo cp /tmp/NTI-310/config_scripts/create_ldap_ssl.sh /etc/openldap/certs/create_ldap_ssl.sh
-sudo ./etc/openldap/certs/create_ldap_ssl.sh
+sudo /etc/openldap/certs/create_ldap_ssl.sh
 
 echo "Key and Cert created in /etc/openldap/certs"
 
@@ -75,7 +75,7 @@ sudo ll /etc/openldap/certs/*.pem
 #copy cert ldif and add to config
 
 sudo cp /tmp/NTI-310/config_scripts/certs.ldif /etc/openldap/slapd.d/certs.ldif
-sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f certs.ldif
+sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/certs.ldif
 
 #add the cosine and nis LDAP schemas
 
@@ -90,7 +90,7 @@ sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f base.ldif
 
 #enter ldapadmin password
 
-echo -e "ldapP@ssw0rd1" \r #needs to be encrypted
+echo -e "ldapP@ssw0rd1" \r #needs to be encrypted -- use imported ldif files
 
 sudo cp /tmp/NTI-310/config_scripts/phpldapadmin.conf /etc/httpd/conf.d/phpldapadmin.conf
 

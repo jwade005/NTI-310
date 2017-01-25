@@ -1,0 +1,14 @@
+cn=Jonathan Admin,ou=People,dc=jwade,dc=local
+dn: cn=Jonathan Admin,ou=People,dc=jwade,dc=local
+cn: Jonathan Admin
+gidnumber: 500
+givenname: Jonathan
+homedirectory: /home/users/jadmin
+loginshell: /bin/sh
+objectclass: inetOrgPerson
+objectclass: posixAccount
+objectclass: top
+sn: Admin
+uid: jadmin
+uidnumber: 1000
+userpassword: {MD5}i46XFdEuTKEsTD60hlqvag==

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-##caution   this is a work in progress
+##caution   this is a work in progress...
 
 #install git
 

@@ -90,12 +90,9 @@ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 sudo cp /tmp/NTI-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
 sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif
 
+
 #......script stops here and prompts for ldap root password......
 
-
-#grants connections from the web
-
-sudo cp -f /tmp/NTI-310/config_scripts/phpldapadmin.php /etc/httpd/conf.d/phpldapadmin.php
 
 #allow cd,dc,dc login
 

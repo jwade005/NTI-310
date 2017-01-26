@@ -2,6 +2,7 @@
 
 #This script works but it will prompt for ldapadm password at base.ldif ldapadd
 #use with caution   this is still a work in progress...
+#replace parameters, github link, and config files with your own
 
 #install git
 

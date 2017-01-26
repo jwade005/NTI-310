@@ -114,5 +114,3 @@ sudo systemctl restart slapd
 
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --reload
-
-#allow cd,dc,dc login

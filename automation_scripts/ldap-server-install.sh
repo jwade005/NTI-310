@@ -1,6 +1,7 @@
 #!/bin/bash
 
-##caution   this is a work in progress...
+#This script works but it will prompt for ldapadm password at base.ldif ldapadd
+#use with caution   this is still a work in progress...
 
 #install git
 
@@ -95,6 +96,14 @@ sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/ba
 
 sudo cp -f /tmp/NTI-310/config_scripts/phpldapadmin.php /etc/httpd/conf.d/phpldapadmin.php
 
+#allow cd,dc,dc login
+
+sudo cp -f /tmp/NTI-310/config_scripts/config.php /etc/phpldapadmin/config.php
+
+#allow login from the web
+
+sudo cp -f /tmp/NTI-310/config_scripts/phpldapadmin.conf /etc/httpd/conf.d/phpldapadmin.conf
+
 #restart htttpd service
 
 sudo systemctl restart httpd.service
@@ -105,5 +114,3 @@ sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --reload
 
 #allow cd,dc,dc login
-
-sudo cp -f /tmp/NTI-310/config_scripts/config.php /etc/phpldapadmin/config.php

@@ -8,7 +8,7 @@ Install and start ldap, http, ldapadmin
 
 yum -y install openldap-servers openldap-clients
 
-cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG 
+cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
 chown ldap. /var/lib/ldap/DB_CONFIG
 
 systemctl enable slapd
@@ -27,14 +27,12 @@ yum -y install phpldapadmin
 # Tell SE linux what's going on, so that it doesn't freek
 setsebool -P httpd_can_connect_ldap on
 
-systemctl restart httpd #jw
-
 
 # decent config guide: http://www.itzgeek.com/how-tos/linux/centos-how-tos/install-configure-phpldapadmin-centos-7-ubuntu-16-04.html
 
 
 
-#Note: LDAP comes up completely insecure, with Anonymous login enabled by default... this is not a good and happy thing, so fix 
+#Note: LDAP comes up completely insecure, with Anonymous login enabled by default... this is not a good and happy thing, so fix
 #it in the config file
 #(prompt for user input), the following is currently a manual config, but could be automated fairly easily
 #slappasswd
@@ -92,7 +90,7 @@ SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
 SASL SSF: 0
 modifying entry "olcDatabase={1}monitor,cn=config"
 
-[root@ldap-server slapd.d]# 
+[root@ldap-server slapd.d]#
 
 #send the configuration to the LDAP server
 
@@ -164,7 +162,7 @@ Copy the sample database configuration file to /var/lib/ldap and update the file
 [root@ldap-server ~]# cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
 cp: overwrite ‘/var/lib/ldap/DB_CONFIG’? y
 [root@ldap-server ~]# chown ldap:ldap /var/lib/ldap/*
-[root@ldap-server ~]# 
+[root@ldap-server ~]#
 
 Add the cosine and nis LDAP schemas
 
@@ -174,7 +172,7 @@ SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
 SASL SSF: 0
 adding new entry "cn=cosine,cn=schema,cn=config"
 
-[root@ldap-server ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif 
+[root@ldap-server ~]# ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
 SASL/EXTERNAL authentication started
 SASL username: gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth
 SASL SSF: 0
@@ -211,7 +209,7 @@ ou: Group
 Build the directory structure (When prompted for password, use root password created earlier.)
 
 [root@ldap-server slapd.d]# ldapadd -x -W -D "cn=ldapadm,dc=itzgeek,dc=local" -f base.ldif
-Enter LDAP Password: 
+Enter LDAP Password:
 adding new entry "dc=jwade,dc=local"
 
 adding new entry "cn=ldapadm ,dc=jwade,dc=local"
@@ -224,7 +222,7 @@ In CentOS 7, web access is managed by mod_authz_core.c module; so regular allow 
 
 # vi /etc/httpd/conf.d/phpldapadmin.conf
 
-Update the configuration file shown like below. 
+Update the configuration file shown like below.
 
 Alias /phpldapadmin /usr/share/phpldapadmin/htdocs
 Alias /ldapadmin /usr/share/phpldapadmin/htdocs
@@ -254,13 +252,13 @@ Configure built-in SElinux firewall to allow access
 success
 [root@ldap-server ~]# firewall-cmd --reload
 success
-[root@ldap-server ~]# 
+[root@ldap-server ~]#
 
 
 Check by navigating to: http://<server IP address>/ldapadmin
 
 ￼
-SUCCESS!! :) 
+SUCCESS!! :)
 
 To log in to ldap admin
 
@@ -280,7 +278,7 @@ $servers->setValue('login','attr','dn');
 ￼
 
 
-#add users and groups 
+#add users and groups
 
 ￼
 
@@ -291,4 +289,3 @@ root@ldap-server ~]# cd /etc/phpldapadmin
 
 /* Enable anonymous bind login. */
 $servers->setValue('login','anon_bind',false);		<— remove ‘//‘ and change true to false
-

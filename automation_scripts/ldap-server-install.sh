@@ -86,13 +86,13 @@ sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 #create base.ldif file for domain
 
 sudo cp /tmp/NTI-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
-sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f base.ldif
+sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif
 
-#enter ldapadmin password
+echo -e "ldapP@ssw0rd1" \r
 
-echo -e "ldapP@ssw0rd1" \r #needs to be encrypted -- use imported ldif files
+#grants connections from the web
 
-sudo cp /tmp/NTI-310/config_scripts/phpldapadmin.conf /etc/httpd/conf.d/phpldapadmin.conf
+sudo cp -f /tmp/NTI-310/config_scripts/phpldapadmin.php /etc/httpd/conf.d/phpldapadmin.php
 
 #restart htttpd service
 
@@ -102,3 +102,7 @@ sudo systemctl restart httpd.service
 
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --reload
+
+#allow cd,dc,dc login
+
+sudo cp -f /tmp/NTI-310/config_scripts/config.php /etc/phpldapadmin/config.php

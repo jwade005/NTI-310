@@ -24,7 +24,7 @@ sudo yum -y install openldap-servers openldap-clients
 
 #copy db config, change ownership
 
-Echo "Copying config file and adjusting permissions..."
+echo "Copying config file and adjusting permissions..."
 sudo cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
 sudo chown ldap. /var/lib/ldap/DB_CONFIG
 
@@ -41,27 +41,27 @@ sudo yum -y install httpd
 
 #enable and start apache
 
-Echo "Enabling and starting the httpd service..."
+echo "Enabling and starting the httpd service..."
 sudo systemctl enable httpd
 sudo systemctl start httpd
 
 #install phpldapadmin
 
-Echo "Installin the epel-release repo..."
+echo "Installin the epel-release repo..."
 sudo yum -y install epel-release
 
-Echo "Installing phpldapadmin..."
+echo "Installing phpldapadmin..."
 sudo yum -y install phpldapadmin
 
 #allow http connection to ldap
 
-Echo "Allowing ldap to use httpd..."
+echo "Allowing ldap to use httpd..."
 sudo setsebool -P httpd_can_connect_ldap on
 sleep 5
 
 #copy db.ldif and add to config
 
-Echo "Copying db.ldif and adding it to ldap configuration..."
+echo "Copying db.ldif and adding it to ldap configuration..."
 sudo cp /tmp/NTI-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
 
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/db.ldif
@@ -69,7 +69,7 @@ sleep 5
 
 #copy monitor.ldif and add to config
 
-Echo "Copying monitor.ldif, adjusting ownership, and adding it to ldap configuration..."
+echo "Copying monitor.ldif, adjusting ownership, and adding it to ldap configuration..."
 sudo cp /tmp/NTI-310/config_scripts/monitor.ldif /etc/openldap/slapd.d/monitor.ldif
 sudo chown ldap. /etc/openldap/slapd.d/monitor.ldif
 
@@ -78,7 +78,7 @@ sleep 5
 
 #create ssl cert
 
-Echo "Creating the self-signed ssl certificate...."
+echo "Creating the self-signed ssl certificate...."
 sudo cp /tmp/NTI-310/config_scripts/create_ldap_ssl.sh /etc/openldap/certs/create_ldap_ssl.sh
 #sudo /etc/openldap/certs/create_ldap_ssl.sh
 (cd /etc/openldap/certs/ ; sudo sh create_ldap_ssl.sh)
@@ -87,26 +87,26 @@ echo "Key and Cert created in /etc/openldap/certs..."
 
 #change ownership of certs and verify
 
-Echo "Changing ownership of certs and verifying..."
+echo "Changing ownership of certs and verifying..."
 sudo chown -R ldap:ldap /etc/openldap/certs/*.pem
 sudo ll /etc/openldap/certs/*.pem
 
 #copy cert ldif and add to config
 
-Echo "Copying cert.ldif and adding it to ldap configuration..."
+echo "Copying cert.ldif and adding it to ldap configuration..."
 sudo cp /tmp/NTI-310/config_scripts/certs.ldif /etc/openldap/slapd.d/certs.ldif
 sudo ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/certs.ldif
 
 #add the cosine and nis LDAP schemas
 
-Echo "Adding the cosine and nis schemas..."
+echo "Adding the cosine and nis schemas..."
 sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
 sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
 sudo ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 #create base.ldif file for domain
 
-Echo "Copying the base.ldif file for the domain and adding it to ldap configuration..."
+echo "Copying the base.ldif file for the domain and adding it to ldap configuration..."
 sudo cp /tmp/NTI-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
 sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif
 
@@ -116,24 +116,24 @@ sudo ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/ba
 
 #allow cn=xxx,dc=xxx,dc=xxx login
 
-Echo "Setting login to fqdn..."
+echo "Setting login to fqdn..."
 sudo cp -f /tmp/NTI-310/config_scripts/config.php /etc/phpldapadmin/config.php
 
 #allow login from the web
 
-Echo "Making ldap htdocs accessible from the web..."
+echo "Making ldap htdocs accessible from the web..."
 sudo cp -f /tmp/NTI-310/config_scripts/phpldapadmin.conf /etc/httpd/conf.d/phpldapadmin.conf
 
 #restart htttpd, slapd services
 
-Echo "Restarting the httpd and slapd services..."
+echo "Restarting the httpd and slapd services..."
 sudo systemctl restart httpd
 sudo systemctl restart slapd
 
 #configure firewall to allow access
 
-Echo "Configuring the built-in firewall to allow access..."
+echo "Configuring the built-in firewall to allow access..."
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --reload
 
-Echo "ldap configuration complete. Point your browser to http://<serverIPaddress>/phpldapadmin to login..."
+echo "ldap configuration complete. Point your browser to http://<serverIPaddress>/phpldapadmin to login..."

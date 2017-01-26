@@ -104,9 +104,10 @@ sudo cp -f /tmp/NTI-310/config_scripts/config.php /etc/phpldapadmin/config.php
 
 sudo cp -f /tmp/NTI-310/config_scripts/phpldapadmin.conf /etc/httpd/conf.d/phpldapadmin.conf
 
-#restart htttpd service
+#restart htttpd, slapd services
 
-sudo systemctl restart httpd.service
+sudo systemctl restart httpd
+sudo systemctl restart slapd
 
 #configure firewall to allow access
 

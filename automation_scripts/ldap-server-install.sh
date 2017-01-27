@@ -26,7 +26,7 @@ sudo yum -y install openldap-servers openldap-clients
 
 echo "Copying config file and adjusting permissions..."
 sudo cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
-sudo chown ldap. /var/lib/ldap/DB_CONFIG
+sudo chown ldap /var/lib/ldap/DB_CONFIG
 
 #enable and start ldap
 

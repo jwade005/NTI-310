@@ -1,3 +1,8 @@
+sudo apt-get install gnome-shell
+sudo apt-get install ubuntu-gnome-desktop
+
+
+
 Update & ldap-client Ubuntu
 
 #update Ubuntu desktop first

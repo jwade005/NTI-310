@@ -6,11 +6,11 @@ Update & ldap-client Ubuntu
 
 #update Ubuntu desktop first
 
-sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
+sudo apt-get --yes update && sudo apt-get --yes upgrade && sudo apt-get --yes dist-upgrade
 
 #Install ldap client
 
-sudo apt-get install libpam-ldap nscd
+sudo apt-get --yes install libpam-ldap nscd
 
 #Configure:
 

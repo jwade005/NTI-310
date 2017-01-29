@@ -21,13 +21,9 @@ sudo apt-get --yes install libpam-ldap nscd
         * Search for: " 'server','base',array " within the file.
         * Our example was "dc=XXX,dc=XXX”
     * LDAP version to use: 3 
-    * Make local root Database admin: Yes 
+    * Make local root Database admin: No
     * Does the LDAP database require login? No 
-    * LDAP account for root:
-        * This should also match the value in your /etc/phpldapadmin/config.php.
-        * Search for: " 'login','bind_id' " within the file
-        * Our example was "cn=admin,dc=test,dc=com"
-    * LDAP root account password: Your-LDAP-root-password 
+    
 
 
 #Set up /etc/nsswitch.conf to use ldap lookups by running:
@@ -55,9 +51,9 @@ ethers:         db files
 rpc:            db files
 
 netgroup:       nis
-JPuppy@ubuntu-desktop:~$ 
+JPuppy@ubuntu-desktop:~$
 
-#Configure pam  
+#Configure pam
 
 JPuppy@ubuntu-desktop:~$ sudo nano /etc/pam.d/common-session
 
@@ -75,7 +71,7 @@ JPuppy@ubuntu-desktop:~$ sudo /etc/init.d/nscd restart
 #opens config file for admin rights
 JPuppy@ubuntu-desktop:~$ sudo visudo
 
-  GNU nano 2.5.3                         File: /etc/sudoers.tmp                                                         
+  GNU nano 2.5.3                         File: /etc/sudoers.tmp
 
 #
 # This file MUST be edited with the 'visudo' command as root.
@@ -128,14 +124,14 @@ jwade005 ALL=NOPASSWD: ALL
 
 JPuppy@ubuntu-desktop:/etc/ssh$ sudo systemctl restart sshd.service
 JPuppy@ubuntu-desktop:/etc/ssh$ su jadmin
-Password: 
+Password:
 
 
 #create a user through phpldapadmin and login
 
 Last login: Sun Jan 22 18:27:59 on ttys002
 Jonathans-MacBook-Pro:~ JPuppy$ ssh jadmin@104.196.246.95	<— “ssh username@<ldapserverIP>”
-Password: 
+Password:
 Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-59-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
@@ -150,6 +146,4 @@ Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.4.0-59-generic x86_64)
 
 *** System restart required ***
 Last login: Mon Jan 23 01:45:01 2017 from 50.132.85.254
-$ 
-
-
+$

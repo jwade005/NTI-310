@@ -24,3 +24,12 @@ sudo mount -v -t nfs 10.128.0.4:/var/config /mnt/nfs/var/config
 
 #verify the mount
 df -h
+
+#automount /home directory off an NFS server upon logging in
+#vi /etc/auto.home
+#  /home         /etc/auto.home             #add this line to bottom----use sed
+touch /etc/auto.master
+  *             10.128.0.4:/export/home/&   #----use sed and add this line to the file
+
+#restart autofs to enable the configuration
+sudo service autofs start

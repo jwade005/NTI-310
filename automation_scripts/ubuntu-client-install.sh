@@ -13,13 +13,14 @@ sudo apt-get --yes update && sudo apt-get --yes upgrade && sudo apt-get --yes di
 #isntall ldap client
 sudo apt-get --yes install libpam-ldap nscd
 
+#******how to skip the autoconfig?*******
 
 #configure ldap client
 #use sed to add config lines to /etc/ldap.conf
-sudo sed '1 a\base dc=jwade,dc=local' /etc/ldap.conf
-sudo sed '2 a\uri ldap://104.197.215.83/' /etc/ldap.conf
-sudo sed '3 a\ldap_version 3' /etc/ldap.conf
-sudo sed '4 a\pam_password md5' /etc/ldap.conf
+#sudo sed '1 a\base dc=jwade,dc=local' /etc/ldap.conf
+#sudo sed '2 a\uri ldap://104.197.215.83/' /etc/ldap.conf
+#sudo sed '3 a\ldap_version 3' /etc/ldap.conf
+#sudo sed '4 a\pam_password md5' /etc/ldap.conf
 
 
 #LDAP server Uniform Resource Identifier: ldap://104.197.215.83
@@ -43,9 +44,9 @@ sudo sed '4 a\pam_password md5' /etc/ldap.conf
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 sudo vi /etc/nsswitch.conf #---use sed command
 
-sudo sed -i 's,passwd:         compat,passwd:         ldap compat' /etc/nsswitch.conf
-sudo sed -i 's,group:          compat,group:          ldap compat' /etc/nsswitch.conf
-sudo sed -i 's,shadow:         compat,shadow:         ldap compat' /etc/nsswitch.conf
+#sudo sed -i 's,passwd:         compat,passwd:         ldap compat' /etc/nsswitch.conf #*****FIX THIS
+#sudo sed -i 's,group:          compat,group:          ldap compat' /etc/nsswitch.conf #*****FIX THIS
+#sudo sed -i 's,shadow:         compat,shadow:         ldap compat' /etc/nsswitch.conf #*****FIX THIS
 #passwd:         ldap compat
 #group:          ldap compat
 #shadow:         ldap compat

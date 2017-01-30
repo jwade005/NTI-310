@@ -25,14 +25,15 @@ df -h
 #automount /home directory from a NFS server when user logging in
 
 #install autofs
-sudo apt-get install autofs
+#sudo apt-get -y install autofs
 
 #edit /etc/auto.master
-sudo sed '$ a\  /home         /etc/auto.home' /etc/auto.master           #add this line to EOF----use sed
+#sudo sed -i '$ a\  /home         /etc/auto.home' /etc/auto.master           #add this line to EOF----use sed
 
 #create and write to /etc/auto.home
-touch /etc/auto.home
-sudo sed '1 a\  *             10.128.0.4:/export/home/&' /etc/auto.home  #----use sed and add this line to the file
+#sudo touch /etc/auto.home
+#sudo chmod 777 /etc/auto.home
+#sudo echo "*          10.128.0.4:/export/home/&" >> /etc/auto.home
 
-#restart autofs to enable the configuration
-sudo service autofs start
+#start autofs to enable the configuration
+#/etc/init.d/autofs start

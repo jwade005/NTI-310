@@ -1,10 +1,6 @@
 #!/bin/bash
 
-#This script works but it will prompt for ldapadm password at base.ldif ldapadd
-#use with caution   this is still a work in progress...
-#replace parameters, github link, and config files with your own
-
-#run as root
+#ldap server-sdie install script -- run as root
 
 #install git
 

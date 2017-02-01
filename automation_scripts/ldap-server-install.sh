@@ -61,10 +61,29 @@ echo "Allowing ldap to use httpd..."
 setsebool -P httpd_can_connect_ldap on
 sleep 5
 
+#generate new hashed password for db.ldif and store it on the server
+newsecret=$(slappasswd -g)
+newhash=$(slappasswd -s "$newsecret")
+echo "$newsecret" > /root/ldap_admin_pass
+
 #copy db.ldif and add to config
 
 echo "Copying db.ldif and adding it to ldap configuration..."
-cp /tmp/NTI-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
+#cp /tmp/NTI-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
+echo "dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=jwade,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=ldapadm,dc=jwade,dc=local
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: $newhash" >> /etc/openldap/slapd.d/db.ldif
 
 ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/db.ldif
 sleep 5
@@ -110,10 +129,7 @@ ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 echo "Copying the base.ldif file for the domain and adding it to ldap configuration..."
 cp /tmp/NTI-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
-ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif
-
-
-#......script stops here and prompts for ldap root password......
+ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif -y /root/ldap_admin_pass
 
 
 #allow cn=xxx,dc=xxx,dc=xxx login

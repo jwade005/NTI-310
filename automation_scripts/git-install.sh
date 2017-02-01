@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#clones local copy of my NTI310 github repository
+
 sudo yum -y install git
 git clone https://github.com/jwade005/NTI-310.git
 git config --global user.name "jwade005"

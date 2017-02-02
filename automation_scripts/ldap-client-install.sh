@@ -13,8 +13,12 @@ apt-get --yes install gnome-shell && apt-get --yes install ubuntu-gnome-desktop
 apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 
 #isntall ldap client
-apt-get --yes install libpam-ldap nscd
+export DEBIAN_FRONTEND=noninteractive
+#apt-get --yes install libpam-ldap nscd  #ldap-auth-client
+apt-get --yes install ldap-auth-client
+unset DEBIAN_FRONTEND
 
+cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf
 #******how to skip the autoconfig?*******
 
 #configure ldap client
@@ -44,10 +48,13 @@ apt-get --yes install libpam-ldap nscd
 #dpkg-reconfigure ldap-auth-config
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
-vi /etc/nsswitch.conf #---use sed command
+#vi /etc/nsswitch.conf #---use sed command
 
+sed -i 's,passwd:         compat,passwd:         ldap compat,g' /etc/nsswitch.conf
 #sed -i 's,passwd:         compat,passwd:         ldap compat' /etc/nsswitch.conf #*****FIX THIS
+sed -i 's,group:          compat,group:          ldap compat,g' /etc/nsswitch.conf
 #sed -i 's,group:          compat,group:          ldap compat' /etc/nsswitch.conf #*****FIX THIS
+sed -i 's,shadow:         compat,shadow:         ldap compat,g' /etc/nsswitch.conf
 #sed -i 's,shadow:         compat,shadow:         ldap compat' /etc/nsswitch.conf #*****FIX THIS
 #passwd:         ldap compat
 #group:          ldap compat
@@ -58,7 +65,7 @@ vi /etc/nsswitch.conf #---use sed command
 #vi /etc/pam.d/common-session #---use sed command
 
 #add this line to the bottom of the config file
-sed '$ a\session required    pam_mkhomedir.so skel=/etc/skel umask=0022' /etc/pam.d/common-session
+sed -i '$ a\session required    pam_mkhomedir.so skel=/etc/skel umask=0022' /etc/pam.d/common-session
 
 #restart the nscd service
 /etc/init.d/nscd restart
@@ -72,8 +79,11 @@ sed -i 's,%admin=(ALL) ALL,#%admin ALL=(ALL) ALL' /etc/sudoers    #---use sed co
 #adjust the ssh config file for the ubuntu-desktop instance /etc/ssh/sshd_config
 #vi /etc/ssh/sshd_config #---use sed command
 #comment out these two lines
-sed -i 's,PasswordAuthentication no,#PasswordAuthentication no' /etc/ssh/sshd_config
+
+#PasswordAuthentication no
+sed -i 's,PasswordAuthentication no,#PasswordAuthentication no,g' /etc/ssh/sshd_config
 #ChallengeResponseAuthentication no
+sed -i 's,ChallengeResponseAuthentication no,#ChallengeResponseAuthentication no,g' /etc/ssh/sshd_config
 
 #restart the sshd service
 systemctl restart sshd.service

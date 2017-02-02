@@ -64,7 +64,7 @@ echo "$newsecret" > /root/ldap_admin_pass
 
 #copy db.ldif and add to config
 
-echo "Copying db.ldif and adding it to ldap configuration..."
+echo "echo db.ldif and adding it to ldap configuration..."
 #cp /tmp/NTI-310/config_scripts/db.ldif /etc/openldap/slapd.d/db.ldif
 echo "dn: olcDatabase={2}hdb,cn=config
 changetype: modify
@@ -106,7 +106,7 @@ echo "Key and Cert created in /etc/openldap/certs..."
 
 echo "Changing ownership of certs and verifying..."
 chown -R ldap:ldap /etc/openldap/certs/*.pem
-ll /etc/openldap/certs/*.pem
+
 
 #copy cert ldif and add to config
 
@@ -125,7 +125,7 @@ ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 
 echo "Copying the base.ldif file for the domain and adding it to ldap configuration..."
 cp /tmp/NTI-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
-ldapadd -x -W -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif -y /root/ldap_admin_pass
+ldapadd -x -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif -y /root/ldap_admin_pass
 
 
 #allow cn=xxx,dc=xxx,dc=xxx login

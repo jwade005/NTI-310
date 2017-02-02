@@ -62,6 +62,8 @@ newsecret=$(slappasswd -g)
 newhash=$(slappasswd -s "$newsecret")
 echo "$newsecret" > /root/ldap_admin_pass
 
+chmod 400 /root/ldap_admin_pass
+
 #copy db.ldif and add to config
 
 echo "echo db.ldif and adding it to ldap configuration..."
@@ -126,7 +128,7 @@ ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
 echo "Copying the base.ldif file for the domain and adding it to ldap configuration..."
 cp /tmp/NTI-310/config_scripts/base.ldif /etc/openldap/slapd.d/base.ldif
 ldapadd -x -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif -y /root/ldap_admin_pass
-
+#ldapadd -W -x -D "cn=ldapadm,dc=jwade,dc=local" -f /etc/openldap/slapd.d/base.ldif
 
 #allow cn=xxx,dc=xxx,dc=xxx login
 

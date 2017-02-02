@@ -15,8 +15,14 @@ apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 #isntall ldap client
 export DEBIAN_FRONTEND=noninteractive
 #apt-get --yes install libpam-ldap nscd  #ldap-auth-client
-apt-get --yes install ldap-auth-client
+apt-get --yes install libpam-ldap nscd
 unset DEBIAN_FRONTEND
+
+echo "Cloning jwade005's NTI-310 GitHub..."
+git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
+git config --global user.name "jwade005"
+git config --global user.email "jwade005@seattlecentral.edu"
+
 
 cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf
 #******how to skip the autoconfig?*******

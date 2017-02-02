@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 #nfs install centos7 server -- run as root
 
@@ -25,14 +25,10 @@ chmod 755 /var/config
 #adjust /etc/exports to allow sharing of folders ***must use internal IPs***
 #vi /etc/exports
 #add these lines       ***use sed--add uncommented lines-empty file***
-ed -s /etc/exports << 'EOF'
-0a
-/home           10.128.0.3(rw,sync,no_root_squash,no_subtree_check)
+echo "/home           10.128.0.3(rw,sync,no_root_squash,no_subtree_check)
 /var/dev        10.128.0.3(rw,sync,no_subtree_check)
-/var/config     10.128.0.3(rw,sync,no_subtree_check)
-.
-w
-EOF
+/var/config     10.128.0.3(rw,sync,no_subtree_check)" >> /etc/exports
+
 
 #sed '1 a\/home           10.128.0.3(rw,sync,no_root_squash,no_subtree_check)'\n /etc/exports
 #sed '2 a\/var/dev        10.128.0.3(rw,sync,no_subtree_check)'\n /etc/exports

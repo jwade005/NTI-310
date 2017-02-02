@@ -60,9 +60,9 @@ sleep 5
 #generate new hashed password for db.ldif and store it on the server
 newsecret=$(slappasswd -g)
 newhash=$(slappasswd -s "$newsecret")
-echo "$newsecret" > /root/ldap_admin_pass
+echo -n "$newsecret" > /root/ldap_admin_pass
 
-chmod 400 /root/ldap_admin_pass
+chmod 600 /root/ldap_admin_pass
 
 #copy db.ldif and add to config
 

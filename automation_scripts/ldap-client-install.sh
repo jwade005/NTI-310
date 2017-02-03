@@ -7,7 +7,7 @@
 #run as root
 
 #install gnome-shell
-apt-get --yes install gnome-shell && apt-get --yes install ubuntu-gnome-desktop
+#apt-get --yes install gnome-shell && apt-get --yes install ubuntu-gnome-desktop
 
 #update ubuntu
 apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade

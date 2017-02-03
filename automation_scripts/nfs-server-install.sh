@@ -12,6 +12,13 @@ yum -y install nfs-utils
 #start nfs server and services
 systemctl enable nfs-server.service
 systemctl start nfs-server.service
+#systemctl enable nfs-server
+#systemctl enable nfs-lock
+#systemctl enable nfs-idmapd
+#systemctl start rpcbind
+#systemctl start nfs-lock
+#systemctl start nfs-idmap
+#systemctl enable rpcbind
 
 #make directories and adjust ownership and permissions
 mkdir /var/dev
@@ -25,9 +32,9 @@ chmod 755 /var/config
 #adjust /etc/exports to allow sharing of folders ***must use internal IPs***
 #vi /etc/exports
 #add these lines       ***use sed--add uncommented lines-empty file***
-echo "/home           10.128.0.3(rw,sync,no_root_squash,no_subtree_check)
-/var/dev        10.128.0.3(rw,sync,no_subtree_check)
-/var/config     10.128.0.3(rw,sync,no_subtree_check)" >> /etc/exports
+echo "/home          10.128.0.3(rw,sync,no_root_squash,no_subtree_check)
+/var/dev       10.128.0.3(rw,sync,no_subtree_check)
+/var/config    10.128.0.3(rw,sync,no_subtree_check)" >> /etc/exports      #(rw sync no_all_squash) * after directory <-- add on all 3 lines
 
 
 #sed '1 a\/home           10.128.0.3(rw,sync,no_root_squash,no_subtree_check)'\n /etc/exports

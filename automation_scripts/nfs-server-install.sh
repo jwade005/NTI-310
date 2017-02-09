@@ -33,9 +33,9 @@ chmod 755 /var/config
 #adjust /etc/exports to allow sharing of folders ***must use internal IPs***
 #vi /etc/exports
 #add these lines       ***use sed--add uncommented lines-empty file***
-echo "/home          10.128.0.3(rw,sync,no_root_squash,no_subtree_check)
-/var/dev       10.128.0.3(rw,sync,no_subtree_check)
-/var/config    10.128.0.3(rw,sync,no_subtree_check)" >> /etc/exports      #(rw sync no_all_squash) * after directory <-- add on all 3 lines
+echo "/home    *(rw,sync,no_all_squash)
+/var/dev       *(rw,sync,no_all_squash)
+/var/config    *(rw,sync,no_all_squash)" >> /etc/exports      #(rw sync no_all_squash) * after directory <-- add on all 3 lines
 
 
 #sed '1 a\/home           10.128.0.3(rw,sync,no_root_squash,no_subtree_check)'\n /etc/exports

@@ -24,9 +24,12 @@ echo "10.128.0.4:/home            /mnt/nfs/home           nfs     defaults 0 0" 
 echo "10.128.0.4:/var/dev         /mnt/nfs/var/dev        nfs     defaults 0 0" >> /etc/fstab
 echo "10.128.0.4:/var/config      /mnt/nfs/var/config     nfs     defaults 0 0" >> /etc/fstab
 
+#install tree to verify mount
+apt-get -y install tree
+
 #verify the mount
 df -h
-
+tree /mnt
 #automount /home directory from a NFS server when user logging in
 
 #install autofs

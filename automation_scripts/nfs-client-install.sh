@@ -19,6 +19,11 @@ mount -v -t nfs 10.128.0.4:/home /mnt/nfs/home
 mount -v -t nfs 10.128.0.4:/var/dev /mnt/nfs/var/dev
 mount -v -t nfs 10.128.0.4:/var/config /mnt/nfs/var/config
 
+#make changes mounting the nfs volumes permanent by editing fstab
+echo "10.128.0.4:/home            /mnt/nfs/home           nfs     defaults 0 0" >> /etc/fstab
+echo "10.128.0.4:/var/dev         /mnt/nfs/var/dev        nfs     defaults 0 0" >> /etc/fstab
+echo "10.128.0.4:/var/config      /mnt/nfs/var/config     nfs     defaults 0 0" >> /etc/fstab
+
 #verify the mount
 df -h
 

@@ -13,12 +13,13 @@ yum -y install nfs-utils
 systemctl enable nfs-server.service
 systemctl start nfs-server.service
 #systemctl enable nfs-server
-#systemctl enable nfs-lock
-#systemctl enable nfs-idmapd
-#systemctl start rpcbind
-#systemctl start nfs-lock
-#systemctl start nfs-idmap
-#systemctl enable rpcbind
+systemctl enable nfs-lock
+systemctl enable nfs-idmapd
+systemctl enable rpcbind
+systemctl start rpcbind
+systemctl start nfs-lock
+systemctl start nfs-idmap
+
 
 #make directories and adjust ownership and permissions
 mkdir /var/dev
@@ -43,3 +44,4 @@ echo "/home          10.128.0.3(rw,sync,no_root_squash,no_subtree_check)
 
 #make changes take effect
 exportfs -a
+systemctl restart nfs-server

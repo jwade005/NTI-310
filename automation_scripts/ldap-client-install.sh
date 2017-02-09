@@ -80,7 +80,7 @@ sed -i '$ a\session required    pam_mkhomedir.so skel=/etc/skel umask=0022' /etc
 #visudo
 
 #comment out this line
-sed -i 's,%admin=(ALL) ALL,#%admin ALL=(ALL) ALL' /etc/sudoers    #---use sed command
+sed -i 's,%admin=(ALL) ALL,#%admin ALL=(ALL) ALL,' /etc/sudoers    #---use sed command
 
 #adjust the ssh config file for the ubuntu-desktop instance /etc/ssh/sshd_config
 #vi /etc/ssh/sshd_config #---use sed command

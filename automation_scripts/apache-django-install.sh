@@ -79,7 +79,7 @@ echo "To switch out of virtualenv, type deactivate."
 echo "Now using this version of Python:"
 
 which python
-sudo chown -R ec2-user /opt/django
+sudo chown -R Jonathan /opt/django
 
 echo "Installing Django"
 

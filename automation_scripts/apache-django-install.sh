@@ -12,9 +12,9 @@ sudo systemctl start httpd.service
 echo "Cloning jwade005's github..."
 sudo yum -y install git
 git clone https://github.com/jwade005/install_scripts.git
-git clone https://github.com/jwade005/automation_scripts.git
+git clone https://github.com/jwade005/NTI-310.git
 echo "Publishing Website..."
-sudo sh -c 'cat automation_scripts/index.html > /var/www/html/index.html'
+sudo sh -c 'cat NTI-310/automation_scripts/index.html > /var/www/html/index.html'
 sudo sh -c 'cat install_scripts/page2.html > /var/www/html/page2.html'
 
 echo "Adjusting Permissions..."

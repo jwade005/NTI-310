@@ -91,6 +91,9 @@ echo "Django admin is version:"
 django-admin --version
 django-admin startproject project1
 
+#echo "Adjusting settings.py allowed_hosts..."
+#sed -i 's,ALLOWED_HOSTS = [],ALLOWED_HOSTS = [*],g' /opt/django/project1/project1/settings.py #<---****FIX This
+
 echo "This is the new django project directory..."
 
 sudo yum -y install tree

@@ -92,7 +92,7 @@ django-admin --version
 django-admin startproject project1
 
 #echo "Adjusting settings.py allowed_hosts..."
-#sed -i 's,ALLOWED_HOSTS = [],ALLOWED_HOSTS = [*],g' /opt/django/project1/project1/settings.py #<---****FIX This
+sed -i 's,ALLOWED_HOSTS = \[\],ALLOWED_HOSTS = \[*\],g' /opt/django/project1/project1/settings.py
 
 echo "This is the new django project directory..."
 

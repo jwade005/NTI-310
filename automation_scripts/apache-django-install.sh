@@ -42,28 +42,15 @@ python --version
 
 echo "Installing virtualenv to give Django it's own version of Python..."
 
-# here you can install with updates or without updates.  To install python pip with a full kernel upgrade (not somthing you would do in prod, but
-# definately somthing you might do to your testing or staging server: sudo yum update
-
-# for a prod install (no update)
-
-
-# this adds the noarch release reposatory from the fedora project, wich contains python pip
-
-# python pip is a package manager for python...
-
 sudo rpm -iUvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm
 sudo yum -y install python-pip
-
-
-# Now we're installing virtualenv, which will allow us to create a python installation and environment, just for our Django server
 
 sudo pip install virtualenv
 cd /opt
 
-# we're going to install our django libs in /opt, often used for optional or add-on.  /usr/local is also a perfectly fine place for new apps
+# we're going to install our django libs in /opt, often used for optional or add-on
 
-# we want to make this env accessible to the ec2-user at first, because we don't want to have to run it as root.
+# we want to make this env accessible to the GCloud user because we don't want to have to run it as root
 
 sudo mkdir django
 sudo chown -R Jonathan django
@@ -91,7 +78,7 @@ echo "Django admin is version:"
 django-admin --version
 django-admin startproject project1
 
-#echo "Adjusting settings.py allowed_hosts..."
+echo "Adjusting settings.py allowed_hosts..."
 sed -i 's,ALLOWED_HOSTS = \[\],ALLOWED_HOSTS = \[*\],g' /opt/django/project1/project1/settings.py
 
 echo "This is the new django project directory..."

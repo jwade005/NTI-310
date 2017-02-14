@@ -3,17 +3,23 @@
 #postgresql install script -- test -- work in progress
 
 #install postgresql
-
+sudo yum -y install epel-release-7
 sudo yum -y install postgresql-server postgresql-contrib
 
 #setup initial database cluster
 
 sudo postgresql-setup initdb
 
+#install and start Apache
+sudo yum -y install httpd
+sudo systemctl enable httpd
+sudo systemctl start httpd
+
 #make a firewall rule for postgres
 
 firewall-cmd --permanent --zone=public --add-service=postgresql
 firewall-cmd --reload
+
 
 #enable and start the postgresql server
 
@@ -74,6 +80,32 @@ pg_ctl reload
 #use the following command to login as project1 user
 #psql -U project1
 
+#Install phpPgAdmin
+
+sudo yum -y install phpPgAdmin
+
+#edit /etc/httpd/conf.d/phpPgAdmin.conf
+
+#change Require Local --> Require all granted
+
+# edit /etc/phpPgAdmin/config.inc.php
+#
+# $conf['servers'][0]['host'] = 'localhost';
+#
+# $conf['servers'][0]['defaultdb'] = 'project1';
+#
+# $conf['servers'][0]['port'] = 5432;
+#
+# $conf['owned_only'] = true;
+
+#allow db to connect on httpd
+
+sudo setsebool -P httpd_can_network_connect_db on 
+
+#restart postgres and httpd services
+
+sudo systemctl restart postgresql
+sudo systemctl restart httpd
 
 
 

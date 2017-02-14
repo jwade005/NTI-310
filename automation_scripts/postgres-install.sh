@@ -71,6 +71,10 @@ exit
 
 pg_ctl reload
 
+#use the following command to login as project1 user
+#psql -U project1
+
+
 
 
 #settings.py <— django

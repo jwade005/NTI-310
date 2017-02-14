@@ -56,9 +56,13 @@ GRANT ALL PRIVILEGES ON DATABASE project1 TO project1;
 
 exit
 
+#edit /var/lib/pgsql/data/postgresql.conf
+
+#listen_addresses = '*'
+
 #edit vi /var/lib/pgsql/data/pg_hba.conf
 
-#host    all             all             104.198.202.103/32      password
+#host    all             all             0.0.0.0/0      md5
 
 # This file is read on server startup and when the postmaster receives
 # a SIGHUP signal.  If you edit the file on a running system, you have
@@ -77,7 +81,7 @@ pg_ctl reload
 #        'NAME': 'project1',
 #        'USER': 'project1',
 #        'PASSWORD': 'P@ssw0rd1',
-#        'HOST': '104.198.202.103',
+#        'HOST': '10.128.0.6',
 #        'PORT': '5432',
 #    }
 #}

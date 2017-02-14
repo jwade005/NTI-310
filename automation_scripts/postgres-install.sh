@@ -92,15 +92,19 @@ sudo yum -y install phpPgAdmin
 #
 # $conf['servers'][0]['host'] = 'localhost';
 #
-# $conf['servers'][0]['defaultdb'] = 'project1';
+# $conf['servers'][0]['desc'] = 'jwade 005 PostgreSQL';
+#
+# $conf['servers'][0]['defaultdb'] = 'postgres';
 #
 # $conf['servers'][0]['port'] = 5432;
+#
+# $conf['extra_login_security'] = false;
 #
 # $conf['owned_only'] = true;
 
 #allow db to connect on httpd
 
-sudo setsebool -P httpd_can_network_connect_db on 
+sudo setsebool -P httpd_can_network_connect_db on
 
 #restart postgres and httpd services
 

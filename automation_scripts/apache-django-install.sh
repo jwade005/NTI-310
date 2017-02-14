@@ -97,8 +97,40 @@ sudo setenforce 0
 
 cd /opt/django/project1
 
-echo "Migrating database files..."
+#echo "Migrating database files..."
 
-python manage.py migrate
+#python manage.py migrate
 
 echo "Django is now accessible from the web at [server IP]:8000..."
+
+#prepare django for postgresql integration -- install postgres dev packages
+
+sudo yum -y install python-devel postgresql-devel
+sudo yum -y install gcc
+
+#install psycopg2 to allow us to use the project1 database on postgres server
+
+pip install psycopg2
+
+#configure django database settings
+
+sed -i "s/        'ENGINE': 'django.db.backends.sqlite3',/        'ENGINE': 'django.db.backends.postgresql_psycopg2',/g" /opt/django/project1/project1/settings.py
+sed -i "s/        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),/        'NAME': 'project1',/g" /opt/django/project1/project1/settings.py
+sed -i "80i       'USER': 'project1'," /opt/django/project1/project1/settings.py    #**** FIX TAB
+sed -i "81i       'PASSWORD': 'P@ssw0rd1'," /opt/django/project1/project1/settings.py #**** FIX TAB
+sed -i "82i       'HOST': '10.128.0.6'," /opt/django/project1/project1/settings.py  #***** FIX TAB
+sed -i "83i       'PORT': '5432'," /opt/django/project1/project1/settings.py  #**** FIX TAB
+
+#migrate databasae
+
+cd /opt/django/project1
+python manage.py makemigrations #*******
+python manage.py migrate
+
+#create user
+
+python manage.py createsuperuser #<-- will allow admin login
+
+#python manage.py runserver 0.0.0.0:8000
+#http://server_domain_or_IP:8000/admin
+#

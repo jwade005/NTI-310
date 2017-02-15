@@ -34,6 +34,10 @@ sudo -i -u postgres
 
 psql
 
+#add a password for posgres user
+
+#\password
+
 #create the database for django project1
 
 CREATE DATABASE project1;

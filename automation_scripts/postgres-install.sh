@@ -30,9 +30,9 @@ sudo systemctl enable postgresql
 
 sudo -i -u postgres
 
-#get a postgres command promt
+#activate a postgres shell command prompt
 
-psql
+psql  #psql man pages for auotmation
 
 #add a password for posgres user
 
@@ -68,11 +68,11 @@ exit
 
 #edit /var/lib/pgsql/data/postgresql.conf
 
-#listen_addresses = '*'
+#listen_addresses = '*'                                           #<---- sed search and replace
 
 #edit vi /var/lib/pgsql/data/pg_hba.conf
 
-#host    all             all             0.0.0.0/0      md5
+#host    all             all             0.0.0.0/0      md5       #<---- sed search and replace
 
 # This file is read on server startup and when the postmaster receives
 # a SIGHUP signal.  If you edit the file on a running system, you have
@@ -88,7 +88,7 @@ pg_ctl reload
 
 sudo yum -y install phpPgAdmin
 
-#edit /etc/httpd/conf.d/phpPgAdmin.conf
+#edit /etc/httpd/conf.d/phpPgAdmin.conf  <-- sed search and replace
 
 #change Require Local --> Require all granted
 
@@ -96,7 +96,7 @@ sudo yum -y install phpPgAdmin
 #
 # $conf['servers'][0]['host'] = 'localhost';
 #
-# $conf['servers'][0]['desc'] = 'jwade 005 PostgreSQL';
+# $conf['servers'][0]['desc'] = 'jwade005 PostgreSQL';
 #
 # $conf['servers'][0]['defaultdb'] = 'postgres';
 #

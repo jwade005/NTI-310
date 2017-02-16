@@ -116,10 +116,15 @@ pip install psycopg2
 
 sed -i "s/        'ENGINE': 'django.db.backends.sqlite3',/        'ENGINE': 'django.db.backends.postgresql_psycopg2',/g" /opt/django/project1/project1/settings.py
 sed -i "s/        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),/        'NAME': 'project1',/g" /opt/django/project1/project1/settings.py
-sed -i "80i       'USER': 'project1'," /opt/django/project1/project1/settings.py    #**** FIX TAB
-sed -i "81i       'PASSWORD': 'P@ssw0rd1'," /opt/django/project1/project1/settings.py #**** FIX TAB
-sed -i "82i       'HOST': '10.128.0.6'," /opt/django/project1/project1/settings.py  #***** FIX TAB
-sed -i "83i       'PORT': '5432'," /opt/django/project1/project1/settings.py  #**** FIX TAB
+sed -i "80i 'USER': 'project1'," /opt/django/project1/project1/settings.py
+sed -i "81i 'PASSWORD': 'P@ssw0rd1'," /opt/django/project1/project1/settings.py
+sed -i "82i 'HOST': '10.128.0.6'," /opt/django/project1/project1/settings.py
+sed -i "83i 'PORT': '5432'," /opt/django/project1/project1/settings.py
+sed -i "s/'USER': 'project1',/        'USER': 'project1',/g" /opt/django/project1/project1/settings.py
+sed -i "s/'PASSWORD': 'P@ssw0rd1',/        'PASSWORD': 'P@ssw0rd1',/g" /opt/django/project1/project1/settings.py
+sed -i "s/'HOST': '10.128.0.6',/        'HOST': '10.128.0.6',/g" /opt/django/project1/project1/settings.py
+sed -i "s/'PORT': '5432',/        'PORT': '5432',/g" /opt/django/project1/project1/settings.py
+
 
 #migrate databasae
 
@@ -130,6 +135,12 @@ python manage.py migrate
 #create user
 
 python manage.py createsuperuser #<-- will allow admin login
+#manage.py docs for automataing
+python manage.py syncdb --noinput
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('jonathan', 'jwade005@seattlecentral.edu', 'P@ssw0rd1')" | python manage.py shell
+
+#start djanngo server in the background <-- use fg to bring the process to the foreground and ctrl-c to quit
+python manage.py runserver 0.0.0.0:8000&
 
 #python manage.py runserver 0.0.0.0:8000
 #http://server_domain_or_IP:8000/admin

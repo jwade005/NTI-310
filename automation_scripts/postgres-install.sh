@@ -67,12 +67,15 @@ GRANT ALL PRIVILEGES ON DATABASE project1 TO project1;
 exit
 
 #edit /var/lib/pgsql/data/postgresql.conf
-
 #listen_addresses = '*'                                           #<---- sed search and replace
 
-#edit vi /var/lib/pgsql/data/pg_hba.conf
+sed -i "s/listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
 
+#edit vi /var/lib/pgsql/data/pg_hba.conf
 #host    all             all             0.0.0.0/0      md5       #<---- sed search and replace
+
+sed -i "s/ident/md5/g" /var/lib/pgsql/data/pg_hba.conf
+echo "host    all             all             0.0.0.0/0      md5" >> /var/lib/pgsql/data/pg_hba.conf
 
 # This file is read on server startup and when the postmaster receives
 # a SIGHUP signal.  If you edit the file on a running system, you have
@@ -115,17 +118,4 @@ sudo setsebool -P httpd_can_network_connect_db on
 sudo systemctl restart postgresql
 sudo systemctl restart httpd
 
-
-
-#settings.py <— django
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'project1',
-#        'USER': 'project1',
-#        'PASSWORD': 'P@ssw0rd1',
-#        'HOST': '10.128.0.6',
-#        'PORT': '5432',
-#    }
-#}
+#point browser to <serverIPaddress>/phpPgAdmin and login using postgres or project1 user to login

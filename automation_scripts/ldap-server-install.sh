@@ -97,18 +97,50 @@ sleep 5
 
 #create ssl cert
 
-echo "Creating the self-signed ssl certificate...."
-cp /tmp/NTI-310/config_scripts/create_ldap_ssl.sh /etc/openldap/certs/create_ldap_ssl.sh
-#/etc/openldap/certs/create_ldap_ssl.sh
-(cd /etc/openldap/certs/ ; sh create_ldap_ssl.sh)
+yum -y install mod_ssl
 
-echo "Key and Cert created in /etc/openldap/certs..."
+mkdir /etc/ssl/private
+chmod 700 /etc/ssl/private
+openssl req -new -x509 -nodes -out /etc/openldap/certs/jwadeldapcert.crt -newkey rsa:2048 -keyout /etc/openldap/certs/jwadeldapkey.key -days 365 -subj "/C=US/ST=WA/L=Seattle/O=IT/OU=NTI310IT/CN=jwade.local"
+/etc/ssl/certs/apache-selfsigned.crt
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+cat /etc/ssl/certs/dhparam.pem | tee -a /etc/ssl/certs/apache-selfsigned.crt
 
-#change ownership of certs and verify
+#modify /etc/httpd/conf.d/ssl.conf
 
-echo "Changing ownership of certs and verifying..."
-chown -R ldap:ldap /etc/openldap/certs/*.pem
+sed  -i '/<VirtualHost _default_:443>/a Alias \/phpldapadmin \/usr\/share\/phpldapadmin\/htdocs' /etc/httpd/conf.d/ssl.conf
+sed  -i '/Alias \/phpldapadmin \/usr\/share\/phpldapadmin\/htdocs/a Alias \/ldapadmin \/usr\/share\/phpldapadmin\/htdocs' /etc/httpd/conf.d/ssl.conf
+sed  -i '/Alias \/ldapadmin \/usr\/share\/phpldapadmin\/htdocs/a DocumentRoot \"\/usr\/share\/phpldapadmin\/htdocs\"' /etc/httpd/conf.d/ssl.conf
+sed  -i '/DocumentRoot \"\/usr\/share\/phpldapadmin\/htdocs\"/a ServerName ldap:443' /etc/httpd/conf.d/ssl.conf
 
+#update cypher suite
+sed -i "s/SSLProtocol all -SSLv2/#SSLProtocol all -SSLv2/g" /etc/httpd/conf.d/ssl.conf
+sed -i "s/SSLCipherSuite HIGH:MEDIUM:\!aNULL:\!MD5:\!SEED:\!IDEA/#SSLCipherSuite HIGH:MEDIUM:\!aNULL:\!MD5:\!SEED:\!IDEA/g" /etc/httpd/conf.d/ssl.conf
+
+cat <<EOT>> /etc/httpd/conf.d/ssl.conf
+# Begin copied text
+# from https://cipherli.st/
+# and https://raymii.org/s/tutorials/Strong_SSL_Security_On_Apache2.html
+
+SSLCipherSuite EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
+SSLProtocol All -SSLv2 -SSLv3
+SSLHonorCipherOrder On
+# Disable preloading HSTS for now.  You can use the commented out header line that includes
+# the "preload" directive if you understand the implications.
+#Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains; preload"
+Header always set Strict-Transport-Security "max-age=63072000; includeSubdomains"
+Header always set X-Frame-Options DENY
+Header always set X-Content-Type-Options nosniff
+# Requires Apache >= 2.4
+SSLCompression off
+SSLUseStapling on
+SSLStaplingCache "shmcb:logs/stapling-cache(150000)"
+# Requires Apache >= 2.4.11
+# SSLSessionTickets Off
+EOT
+
+#restart the httpd service
+systemctl restart httpd
 
 #copy cert ldif and add to config
 

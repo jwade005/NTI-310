@@ -16,7 +16,7 @@ apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 
 export DEBIAN_FRONTEND=noninteractive       #******how to skip the autoconfig*******
 #apt-get --yes install libpam-ldap nscd  #ldap-auth-client
-apt-get --yes install slapd ldap-utils
+apt-get --yes install libpam-ldap nscd
 unset DEBIAN_FRONTEND
 
 echo "Cloning jwade005's NTI-310 GitHub..."
@@ -54,7 +54,7 @@ sed -i 's,shadow:         compat,shadow:         ldap compat,g' /etc/nsswitch.co
 sed -i '$ a\session required    pam_mkhomedir.so skel=/etc/skel umask=0022' /etc/pam.d/common-session
 
 #restart the nscd service
-/etc/init.d/slapd restart
+/etc/init.d/nscd restart
 
 #edit the sudoers file to give access to the admin group in ldap
 #visudo

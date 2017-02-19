@@ -13,9 +13,10 @@
 apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 
 #isntall ldap client
-export DEBIAN_FRONTEND=noninteractive
+
+export DEBIAN_FRONTEND=noninteractive       #******how to skip the autoconfig*******
 #apt-get --yes install libpam-ldap nscd  #ldap-auth-client
-apt-get --yes install libpam-ldap nscd
+apt-get --yes install slapd ldap-utils
 unset DEBIAN_FRONTEND
 
 echo "Cloning jwade005's NTI-310 GitHub..."
@@ -25,33 +26,12 @@ git config --global user.email "jwade005@seattlecentral.edu"
 
 
 cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf
-#******how to skip the autoconfig?*******
 
-#configure ldap client
-#use sed to add config lines to /etc/ldap.conf
-#sed '1 a\base dc=jwade,dc=local' /etc/ldap.conf
-#sed '2 a\uri ldap://104.197.215.83/' /etc/ldap.conf
-#sed '3 a\ldap_version 3' /etc/ldap.conf
-#sed '4 a\pam_password md5' /etc/ldap.conf
-
-
-#LDAP server Uniform Resource Identifier: ldap://104.197.215.83
-
-#Change the initial string from "ldapi:///" to "ldap://" before inputing your server's information
-#Distinguished name of the search base:
-
-#This should match the value you put in your LDAP server's /etc/phpldapadmin/config.php file.
-#Search for: " 'server','base',array " within the file.
-#dc=jwade,dc=local
-
-#LDAP version to use: 3
-
-#Make local root Database admin: No
-
-#Does the LDAP database require login? No
 
 #if you make a mistake and need to run the configuration again, use this command
-#dpkg-reconfigure ldap-auth-config
+#dpkg-reconfigure slapd
+
+
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 #vi /etc/nsswitch.conf #---use sed command
@@ -74,7 +54,7 @@ sed -i 's,shadow:         compat,shadow:         ldap compat,g' /etc/nsswitch.co
 sed -i '$ a\session required    pam_mkhomedir.so skel=/etc/skel umask=0022' /etc/pam.d/common-session
 
 #restart the nscd service
-/etc/init.d/nscd restart
+/etc/init.d/slapd restart
 
 #edit the sudoers file to give access to the admin group in ldap
 #visudo

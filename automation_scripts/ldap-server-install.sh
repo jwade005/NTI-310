@@ -116,7 +116,7 @@ objectclass: posixGroup
 objectclass: top
 " >> /etc/openldap/slapd.d/nti310group.ldif
 
-ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/nti310group.ldif
+ldapadd -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/nti310group.ldif
 sleep 5
 
 #add user jwade to ldap
@@ -149,7 +149,7 @@ userpassword: {SHA512}Uq5Amw16vh0dOaUJX9VznkomZsZw6BBePyx6JPkCRnpMGLuMEOFt6y
  g19H3BntVwT8qlY50nN8oxM4a4TBSZXQ==
 " >> /etc/openldap/slapd.d/jonathan.ldif
 
-ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/jonathan.ldif
+ldapadd -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/jonathan.ldif
 sleep 5
 
 #create ssl cert

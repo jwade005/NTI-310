@@ -101,8 +101,7 @@ yum -y install mod_ssl
 
 mkdir /etc/ssl/private
 chmod 700 /etc/ssl/private
-openssl req -new -x509 -nodes -out /etc/openldap/certs/jwadeldapcert.pem -newkey rsa:2048 -keyout /etc/openldap/certs/jwadeldapkey.pem -days 365 -subj "/C=US/ST=WA/L=Seattle/O=IT/OU=NTI310IT/CN=jwade.local"
-/etc/ssl/certs/apache-selfsigned.crt
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -subj "/C=US/ST=WA/L=Seattle/O=IT/OU=NTI310IT/CN=jwade.local" -out /etc/ssl/certs/apache-selfsigned.crt
 openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 cat /etc/ssl/certs/dhparam.pem | tee -a /etc/ssl/certs/apache-selfsigned.crt
 

@@ -25,7 +25,7 @@ git config --global user.name "jwade005"
 git config --global user.email "jwade005@seattlecentral.edu"
 
 
-cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf
+cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf <-- ***adjust ldap.conf for ladps:/// and port 636
 
 
 #if you make a mistake and need to run the configuration again, use this command

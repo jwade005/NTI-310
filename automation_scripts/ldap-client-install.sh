@@ -16,7 +16,7 @@ apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 
 export DEBIAN_FRONTEND=noninteractive       #******how to skip the autoconfig*******
 #apt-get --yes install libpam-ldap nscd  #ldap-auth-client
-apt-get --yes install libpam-ldap nscd
+apt-get --yes install libnss-ldap libpam-ldap ldap-utils nscd
 unset DEBIAN_FRONTEND
 
 echo "Cloning jwade005's NTI-310 GitHub..."

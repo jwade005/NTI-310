@@ -6,9 +6,6 @@
 
 #run as root
 
-#install gnome-shell
-#apt-get --yes install gnome-shell && apt-get --yes install ubuntu-gnome-desktop
-
 #update ubuntu
 apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 
@@ -16,7 +13,7 @@ apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 
 export DEBIAN_FRONTEND=noninteractive       #******how to skip the autoconfig*******
 #apt-get --yes install libpam-ldap nscd  #ldap-auth-client
-apt-get --yes install libnss-ldap libpam-ldap ldap-utils nscd
+apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd
 unset DEBIAN_FRONTEND
 
 echo "Cloning jwade005's NTI-310 GitHub..."
@@ -26,7 +23,7 @@ git config --global user.email "jwade005@seattlecentral.edu"
 
 
 cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf <-- ***adjust ldap.conf for ladps:/// and port 636
-
+cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
 
 #if you make a mistake and need to run the configuration again, use this command
 #dpkg-reconfigure slapd
@@ -42,19 +39,12 @@ sed -i 's,group:          compat,group:          ldap compat,g' /etc/nsswitch.co
 #sed -i 's,group:          compat,group:          ldap compat' /etc/nsswitch.conf #*****FIX THIS
 sed -i 's,shadow:         compat,shadow:         ldap compat,g' /etc/nsswitch.conf
 #sed -i 's,shadow:         compat,shadow:         ldap compat' /etc/nsswitch.conf #*****FIX THIS
-#passwd:         ldap compat
-#group:          ldap compat
-#shadow:         ldap compat
-
-
-#edit the PAM config file - /etc/pam.d/common-session
-#vi /etc/pam.d/common-session #---use sed command
 
 #add this line to the bottom of the config file
 sed -i '$ a\session required    pam_mkhomedir.so skel=/etc/skel umask=0022' /etc/pam.d/common-session
 
-#restart the nscd service
-/etc/init.d/nscd restart
+#restart the nslcd service
+/etc/init.d/nslcd restart
 
 #edit the sudoers file to give access to the admin group in ldap
 #visudo

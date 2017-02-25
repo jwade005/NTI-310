@@ -90,7 +90,7 @@ sleep 5
 
 echo "Copying monitor.ldif, adjusting ownership, and adding it to ldap configuration..."
 cp /tmp/NTI-310/config_scripts/monitor.ldif /etc/openldap/slapd.d/monitor.ldif
-chown ldap. /etc/openldap/slapd.d/monitor.ldif
+chown ldap /etc/openldap/slapd.d/monitor.ldif
 
 ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/monitor.ldif
 sleep 5
@@ -98,7 +98,7 @@ sleep 5
 #create ldap cert and keyout
 
 openssl req -new -x509 -nodes -out /etc/openldap/certs/jwadeldapcert.pem -newkey rsa:2048 -keyout /etc/openldap/certs/jwadeldapkey.pem -days 365 -subj "/C=US/ST=WA/L=Seattle/O=IT/OU=NTI310IT/CN=jwade.local"
-chown -R ldap. /etc/openldap/certs/nti*.pem
+chown -R ldap /etc/openldap/certs/nti*.pem
 
 #copy cert ldif and add to config
 
@@ -106,7 +106,7 @@ echo "Copying cert.ldif and adding it to ldap configuration..."
 cp /tmp/NTI-310/config_scripts/certs.ldif /etc/openldap/slapd.d/certs.ldif
 ldapmodify -Y EXTERNAL  -H ldapi:/// -f /etc/openldap/slapd.d/certs.ldif
 
-#create ssl cert
+#create apache-selfsigned cert
 
 yum -y install mod_ssl
 

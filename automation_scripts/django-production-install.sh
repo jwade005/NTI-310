@@ -57,7 +57,6 @@ sudo yum -y install tree
 tree project1
 
 #adjust project settings
-echo "STATIC_ROOT = os.path.join(BASE_DIR, "static/")" >> /project1/settings.py
 sed -i "s,ALLOWED_HOSTS = \[\],ALLOWED_HOSTS = \['*'\],g" /opt/django/project1/project1/settings.py
 
 #generate password for Superuser

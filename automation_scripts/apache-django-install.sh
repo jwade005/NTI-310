@@ -136,7 +136,7 @@ python manage.py migrate
 
 python manage.py createsuperuser #<-- will allow admin login
 #manage.py docs for automataing
-python manage.py syncdb --noinput
+#python manage.py syncdb --noinput
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('jonathan', 'jwade005@seattlecentral.edu', 'P@ssw0rd1')" | python manage.py shell
 
 #start djanngo server in the background <-- use fg to bring the process to the foreground and ctrl-c to quit

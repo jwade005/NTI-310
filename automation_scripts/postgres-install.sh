@@ -17,8 +17,8 @@ sudo systemctl start httpd
 
 #make a firewall rule for postgres
 
-firewall-cmd --permanent --zone=public --add-service=postgresql
-firewall-cmd --reload
+sudo firewall-cmd --permanent --zone=public --add-service=postgresql
+sudo firewall-cmd --reload
 
 
 #enable and start the postgresql server
@@ -69,20 +69,20 @@ exit
 #edit /var/lib/pgsql/data/postgresql.conf
 #listen_addresses = '*'                                           #<---- sed search and replace
 
-sed -i "s/listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
+sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/lib/pgsql/data/postgresql.conf
 
 #edit vi /var/lib/pgsql/data/pg_hba.conf
 #host    all             all             0.0.0.0/0      md5       #<---- sed search and replace
 
-sed -i "s/ident/md5/g" /var/lib/pgsql/data/pg_hba.conf
-echo "host    all             all             0.0.0.0/0      md5" >> /var/lib/pgsql/data/pg_hba.conf
+sudo sed -i "s/ident/md5/g" /var/lib/pgsql/data/pg_hba.conf
+sudo echo "host    all             all             0.0.0.0/0      md5" >> /var/lib/pgsql/data/pg_hba.conf
 
 # This file is read on server startup and when the postmaster receives
 # a SIGHUP signal.  If you edit the file on a running system, you have
 # to SIGHUP the postmaster for the changes to take effect.  You can
 # use "pg_ctl reload" to do that.
 
-pg_ctl reload
+#pg_ctl reload    #<---- ***** not working, doesn't identify db *****
 
 #use the following command to login as project1 user
 #psql -U project1

@@ -36,7 +36,7 @@ psql  #psql man pages for auotmation
 
 #add a password for posgres user
 
-#\password
+#\password    <------ *****Don't forget to set the postgres user password!!*****
 
 #create the database for django project1
 
@@ -75,7 +75,7 @@ sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /var/li
 #host    all             all             0.0.0.0/0      md5       #<---- sed search and replace
 
 sudo sed -i "s/ident/md5/g" /var/lib/pgsql/data/pg_hba.conf
-sudo echo "host    all             all             0.0.0.0/0      md5" >> /var/lib/pgsql/data/pg_hba.conf
+sudo sed -i -e "\$ahost    all             all             0.0.0.0/0      md5" /var/lib/pgsql/data/pg_hba.conf
 
 # This file is read on server startup and when the postmaster receives
 # a SIGHUP signal.  If you edit the file on a running system, you have

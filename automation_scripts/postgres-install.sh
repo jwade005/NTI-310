@@ -6,6 +6,14 @@
 sudo yum -y install epel-release-7
 sudo yum -y install postgresql-server postgresql-contrib
 
+echo "Installing git..."
+yum -y install git
+
+echo "Cloning jwade005's NTI-310 GitHub..."
+git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
+git config --global user.name "jwade005"
+git config --global user.email "jwade005@seattlecentral.edu"
+
 #setup initial database cluster
 
 sudo postgresql-setup initdb
@@ -26,45 +34,30 @@ sudo firewall-cmd --reload
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
-#login in to the postgres account created during installation
+#use postgres account to setup database
 
-sudo -i -u postgres
+sudo cp /tmp/NTI-310/config_scripts/postgres.sql /var/lib/pgsql/postgres.sql
+sudo -i -u postgres psql -U postgres -f /var/lib/pgsql/postgres.sql
 
 #activate a postgres shell command prompt
-
-psql  #psql man pages for auotmation
-
+#psql  #psql man pages for auotmation
 #add a password for posgres user
-
 #\password    <------ *****Don't forget to set the postgres user password!!*****
-
 #create the database for django project1
-
-CREATE DATABASE project1;
-
+#CREATE DATABASE project1;
 #create a project1 user and password
-
-CREATE USER project1 WITH PASSWORD 'P@ssw0rd1';
-
+#CREATE USER project1 WITH PASSWORD 'P@ssw0rd1';
 #configure project1 users settings
-
-ALTER ROLE project1 SET client_encoding TO 'utf8';
-ALTER ROLE project1 SET default_transaction_isolation TO 'read committed';
-ALTER ROLE project1 SET timezone TO 'UTC';
-
+#ALTER ROLE project1 SET client_encoding TO 'utf8';
+#ALTER ROLE project1 SET default_transaction_isolation TO 'read committed';
+#ALTER ROLE project1 SET timezone TO 'UTC';
 #give database user project1 access rights to the database project1
-
-GRANT ALL PRIVILEGES ON DATABASE project1 TO project1;
-
+#GRANT ALL PRIVILEGES ON DATABASE project1 TO project1;
 #command \conninfo will give you connection info in the sql prompt
-
 #exit the sql prompt
-
-\q
-
+#\q
 #exit the postgres shell
-
-exit
+#exit
 
 #edit /var/lib/pgsql/data/postgresql.conf
 #listen_addresses = '*'                                           #<---- sed search and replace
@@ -82,7 +75,7 @@ sudo sed -i -e "\$ahost    all             all             0.0.0.0/0      md5" /
 # to SIGHUP the postmaster for the changes to take effect.  You can
 # use "pg_ctl reload" to do that.
 
-sudo -i -u postgres pg_ctl reload 
+sudo -i -u postgres pg_ctl reload
 
 #use the following command to login as project1 user
 #psql -U project1

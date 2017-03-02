@@ -24,11 +24,9 @@ git config --global user.email "jwade005@seattlecentral.edu"
 
 cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf <-- ***adjust ldap.conf for ladps:/// and port 636
 cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
-
-#if you make a mistake and need to run the configuration again, use this command
-#dpkg-reconfigure slapd
-
-
+sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
+sed -i 's,#BASE   dc=example\,dc=com,BASE	dc=jwade\,dc=local,g' /etc/ldap/ldap.conf
+sed -i 's,##URI	ldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI	ldaps:\/\/10.128.0.2'
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 #vi /etc/nsswitch.conf #---use sed command

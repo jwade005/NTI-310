@@ -82,7 +82,7 @@ sudo sed -i -e "\$ahost    all             all             0.0.0.0/0      md5" /
 # to SIGHUP the postmaster for the changes to take effect.  You can
 # use "pg_ctl reload" to do that.
 
-#pg_ctl reload    #<---- ***** not working, doesn't identify db *****
+sudo -i -u postgres pg_ctl reload 
 
 #use the following command to login as project1 user
 #psql -U project1
@@ -92,8 +92,8 @@ sudo sed -i -e "\$ahost    all             all             0.0.0.0/0      md5" /
 sudo yum -y install phpPgAdmin
 
 #edit /etc/httpd/conf.d/phpPgAdmin.conf  <-- sed search and replace
-
 #change Require Local --> Require all granted
+sed -i 's,  Require local,  Require all granted,g' /etc/httpd/conf.d/phpPgAdmin.conf
 
 # edit /etc/phpPgAdmin/config.inc.php
 #

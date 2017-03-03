@@ -11,7 +11,7 @@
 	// indexed from zero upwards.
 
 	// Display name for the server on the login screen
-	$conf['servers'][0]['desc'] = 'Jwade005 PostgreSQL-b-staging';
+	$conf['servers'][0]['desc'] = 'Jwade005 PostgreSQL';
 
 	// Hostname or IP address for server.  Use '' for UNIX domain socket.
 	// use 'localhost' for TCP/IP connection on this computer

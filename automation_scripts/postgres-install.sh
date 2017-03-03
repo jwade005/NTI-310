@@ -90,7 +90,7 @@ sudo sed -i 's,  Require local,  Require all granted,g' /etc/httpd/conf.d/phpPgA
 
 # edit /etc/phpPgAdmin/config.inc.php
 
-cp /tmp/NTI-310/config_scripts/config.inc.php /etc/phpPgAdmin/config.inc.php
+sudo cp /tmp/NTI-310/config_scripts/config.inc.php /etc/phpPgAdmin/config.inc.php
 
 #sudo sed -i "s,$conf['servers'][0]['host'] = 'localhost';,$conf['servers'][0]['host'] = 'localhost';,g"
 #sudo sed -i "s,$conf['servers'][0]['desc'] = 'PostgreSQL';,$conf['servers'][0]['desc'] = 'jwade005 PostgreSQL';"
@@ -109,3 +109,4 @@ sudo systemctl restart postgresql
 sudo systemctl restart httpd
 
 #point browser to <serverIPaddress>/phpPgAdmin and login using postgres or project1 user to login
+echo "point browser to <serverIPaddress>/phpPgAdmin and login using postgres or project1 user to login."

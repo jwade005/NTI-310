@@ -7,12 +7,12 @@ sudo yum -y install epel-release-7
 sudo yum -y install postgresql-server postgresql-contrib
 
 echo "Installing git..."
-yum -y install git
+sudo yum -y install git
 
 echo "Cloning jwade005's NTI-310 GitHub..."
-git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
-git config --global user.name "jwade005"
-git config --global user.email "jwade005@seattlecentral.edu"
+sudo git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
+sudo git config --global user.name "jwade005"
+sudo git config --global user.email "jwade005@seattlecentral.edu"
 
 #setup initial database cluster
 
@@ -86,7 +86,7 @@ sudo yum -y install phpPgAdmin
 
 #edit /etc/httpd/conf.d/phpPgAdmin.conf  <-- sed search and replace
 #change Require Local --> Require all granted
-sed -i 's,  Require local,  Require all granted,g' /etc/httpd/conf.d/phpPgAdmin.conf
+sudo sed -i 's,  Require local,  Require all granted,g' /etc/httpd/conf.d/phpPgAdmin.conf
 
 # edit /etc/phpPgAdmin/config.inc.php
 #

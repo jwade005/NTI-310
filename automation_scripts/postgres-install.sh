@@ -93,8 +93,8 @@ sudo sed -i 's,  Require local,  Require all granted,g' /etc/httpd/conf.d/phpPgA
 sudo cp /tmp/NTI-310/config_scripts/config.inc.php /etc/phpPgAdmin/config.inc.php
 
 #sudo sed -i "s,$conf['servers'][0]['host'] = 'localhost';,$conf['servers'][0]['host'] = 'localhost';,g"
-#sudo sed -i "s,$conf['servers'][0]['desc'] = 'PostgreSQL';,$conf['servers'][0]['desc'] = 'jwade005 PostgreSQL';"
-#sudo sed -i "s,$conf['servers'][0]['defaultdb'] = 'template1';,$conf['servers'][0]['defaultdb'] = 'postgres';"
+#sudo sed -i "s,$conf['servers'][0]['desc'] = 'PostgreSQL';,$conf['servers'][0]['desc'] = 'jwade005 PostgreSQL';,g"
+#sudo sed -i "s,$conf['servers'][0]['defaultdb'] = 'template1';,$conf['servers'][0]['defaultdb'] = 'postgres';,g"
 # $conf['servers'][0]['port'] = 5432;
 # $conf['extra_login_security'] = false;
 # $conf['owned_only'] = true;

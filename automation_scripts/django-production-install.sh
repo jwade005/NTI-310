@@ -129,7 +129,7 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 
 deactivate
 
-#allow django to connect to the db on httpd
+#allow django to connect to the db on httpd <--- solves issue with django being able to reconnect to the db
 
 sudo setsebool -P httpd_can_network_connect_db on
 

@@ -129,4 +129,7 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 
 deactivate
 
+sudo setsebool -P httpd_can_network_connect_db on
+
+
 echo "Django is now installed and connected to postgres db and accessible from the web."

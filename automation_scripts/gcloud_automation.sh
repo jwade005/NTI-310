@@ -26,6 +26,25 @@ gcloud config set compute/zone us-west1-a
 
 gcloud config set compute/region us-west1
 
+echo "Creating firewall-rules..."
+gcloud compute firewall-rules create allow-http --description "Incoming http allowed." \
+    --allow tcp:80
+
+gloud compute firewall-rules create allow-ldap --description "Incoming ldap allowed." \
+    --allow tcp:636
+
+gcloud compute firewall-rules create allow-postgresql --description "Posgresql allowed." \
+    --allow tcp:5432
+
+gcloud compute firewall-rules create allow-https --description "Incoming https allowed." \
+    --allow tcp:443
+
+gcloud compute firewall-rules create allow-django --description "Django test server connection allowed." \
+    --allow tcp:8000
+
+gcloud compute firewall-rules create allow-ftp --description "FTP Allowed." \
+    --allow tcp:21
+
 echo "Creating ubuntu-client instance and running the install scripts..."
 gcloud compute instances create ubuntu-client \
     --image-family ubuntu-1604-lts \

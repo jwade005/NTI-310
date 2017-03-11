@@ -5,9 +5,9 @@ echo "This is jwade005's Gcloud Automation"
 echo "Authorizing jwade005 for this project..."
 gcloud auth login jwade005@seattlecentral.edu --no-launch-browser
 
-echo "Creating the project..."
-gcloud alpha projects create nti310-automation-9 \
-    --name="NTI310 Automation"
+#echo "Creating the project..."
+#gcloud alpha projects create nti310-automation-9 \
+#    --name="NTI310 Automation"
 
 echo "Creating Configuration..."
 gcloud config configurations create auto1
@@ -45,6 +45,15 @@ gcloud compute firewall-rules create allow-django --description "Django test ser
 gcloud compute firewall-rules create allow-ftp --description "FTP Allowed." \
     --allow tcp:21
 
+echo "Creating the rsyslog-server instance and running the install script..."
+gcloud compute instances create rsyslog-server \
+    --image-family centos-7 \
+    --image-project centos-cloud \
+    --machine-type f1-micro \
+    --zone us-west1-a \
+    --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/rsyslog-server-install.sh \
+
+
 echo "Creating ubuntu-client instance and running the install scripts..."
 gcloud compute instances create ubuntu-client \
     --image-family ubuntu-1604-lts \
@@ -62,17 +71,6 @@ gcloud compute instances create ldap-server \
     --machine-type f1-micro \
     --zone us-west1-a \
     --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/ldap-server-install.sh \
-
-
-
-echo "Creating the rsyslog-server instance and running the install script..."
-gcloud compute instances create rsyslog-server \
-    --image-family centos-7 \
-    --image-project centos-cloud \
-    --machine-type f1-micro \
-    --zone us-west1-a \
-    --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/rsyslog-server-install.sh \
-
 
 
 echo "Creating the nfs-server and running the install script..."

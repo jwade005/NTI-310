@@ -27,7 +27,7 @@ cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf <-- ***adjust ldap.conf 
 cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
 sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
 sed -i 's|#BASE   dc=example,dc=com|BASE   dc=jwade,dc=local|g' /etc/ldap/ldap.conf
-sed -i 's,#URI    ldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI    ldaps:\/\/ldap-server,g' /etc/ldap/ldap.conf
+sed -i 's,#URI    ldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI    ldaps:\/\/10.138.0.4,g' /etc/ldap/ldap.conf
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 #vi /etc/nsswitch.conf #---use sed command

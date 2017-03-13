@@ -21,12 +21,13 @@ git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
 git config --global user.name "jwade005"
 git config --global user.email "jwade005@seattlecentral.edu"
 
+ip1="gcloud compute instances list | grep ldap-server | awk '{print $4}'"
 
 cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf <-- ***adjust ldap.conf for ladps:/// and port 636
 cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
 sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
 sed -i 's,#BASE   dc=example\,dc=com,BASE	dc=jwade\,dc=local,g' /etc/ldap/ldap.conf
-sed -i 's,##URI	ldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI	ldaps:\/\/10.128.0.2'
+sed -i 's,##URI	ldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI	ldaps:\/\/$ip1'
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 #vi /etc/nsswitch.conf #---use sed command
@@ -81,15 +82,17 @@ mkdir -p /mnt/nfs/var/config
 #start the mapping service
 service nfs-idmapd start
 
+ip2="gcloud compute instances list | grep nfs-server | awk '{print $4}'"
+
 #mount the volumes
-mount -v -t nfs 10.128.0.4:/home /mnt/nfs/home
-mount -v -t nfs 10.128.0.4:/var/dev /mnt/nfs/var/dev
-mount -v -t nfs 10.128.0.4:/var/config /mnt/nfs/var/config
+mount -v -t nfs $ip2:/home /mnt/nfs/home
+mount -v -t nfs $ip2:/var/dev /mnt/nfs/var/dev
+mount -v -t nfs $ip2:/var/config /mnt/nfs/var/config
 
 #make changes mounting the nfs volumes permanent by editing fstab
-echo "10.128.0.4:/home            /mnt/nfs/home           nfs     defaults 0 0" >> /etc/fstab
-echo "10.128.0.4:/var/dev         /mnt/nfs/var/dev        nfs     defaults 0 0" >> /etc/fstab
-echo "10.128.0.4:/var/config      /mnt/nfs/var/config     nfs     defaults 0 0" >> /etc/fstab
+echo "$ip2:/home            /mnt/nfs/home           nfs     defaults 0 0" >> /etc/fstab
+echo "$ip2:/var/dev         /mnt/nfs/var/dev        nfs     defaults 0 0" >> /etc/fstab
+echo "$ip2:/var/config      /mnt/nfs/var/config     nfs     defaults 0 0" >> /etc/fstab
 
 #install tree to verify mount
 apt-get -y install tree
@@ -101,7 +104,7 @@ tree /mnt
 #rsyslog client-side configuration -- run as root
 #must be run on each rsyslog client
 
-ip="gcloud compute instances list | grep rsyslog-server | awk '{print $4}'"
+ip3="gcloud compute instances list | grep rsyslog-server | awk '{print $4}'"
 
-echo "*.info;mail.none;authpriv.none;cron.none    @$ip" >> /etc/rsyslog.conf
+echo "*.info;mail.none;authpriv.none;cron.none    @$ip3" >> /etc/rsyslog.conf
 service rsyslog restart                                     #ubuntu command

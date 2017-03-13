@@ -3,7 +3,7 @@
 #rsyslog client-side configuration -- run as root
 #must be run on each rsyslog client
 
-ip="gcloud compute instances list | grep rsyslog-server | awk '{print $4}'"
+ip=$(gcloud compute instances list | grep rsyslog-server | awk '{print $4}')
 
 echo "*.info;mail.none;authpriv.none;cron.none    @$ip" >> /etc/rsyslog.conf
 service rsyslog restart                                     #ubuntu command

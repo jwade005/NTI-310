@@ -103,7 +103,7 @@ sed -i "82i 'HOST': '10.138.0.6'," /opt/django/project1/project1/settings.py
 sed -i "83i 'PORT': '5432'," /opt/django/project1/project1/settings.py
 sed -i "s/'USER': 'project1',/        'USER': 'project1',/g" /opt/django/project1/project1/settings.py
 sed -i "s/'PASSWORD': 'P@ssw0rd1',/        'PASSWORD': 'P@ssw0rd1',/g" /opt/django/project1/project1/settings.py
-sed -i "s/'HOST': '10.138.0.8',/        'HOST': '10.138.0.6',/g" /opt/django/project1/project1/settings.py
+sed -i "s/'HOST': '10.138.0.6',/        'HOST': '10.138.0.6',/g" /opt/django/project1/project1/settings.py
 sed -i "s/'PORT': '5432',/        'PORT': '5432',/g" /opt/django/project1/project1/settings.py
 
 #prepare django for postgresql integration -- install postgres dev packages

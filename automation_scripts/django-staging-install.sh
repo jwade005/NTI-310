@@ -87,7 +87,7 @@ deactivate
 
 #tell django to use apache and mod_wsgi, adjust permissions
 
-sudo cp /home/Jonathan/NTI-310/config_scripts/httpd.conf /etc/httpd/conf/httpd.conf
+sudo cp /NTI-310/config_scripts/httpd.conf /etc/httpd/conf/httpd.conf
 sudo usermod -a -G Jonathan apache
 sudo setenforce 0
 sudo systemctl restart httpd
@@ -99,11 +99,11 @@ sed -i "s/        'ENGINE': 'django.db.backends.sqlite3',/        'ENGINE': 'dja
 sed -i "s/        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),/        'NAME': 'project1',/g" /opt/django/project1/project1/settings.py
 sed -i "80i 'USER': 'project1'," /opt/django/project1/project1/settings.py
 sed -i "81i 'PASSWORD': 'P@ssw0rd1'," /opt/django/project1/project1/settings.py
-sed -i "82i 'HOST': '10.138.0.6'," /opt/django/project1/project1/settings.py
+sed -i "82i 'HOST': '10.138.0.7'," /opt/django/project1/project1/settings.py
 sed -i "83i 'PORT': '5432'," /opt/django/project1/project1/settings.py
 sed -i "s/'USER': 'project1',/        'USER': 'project1',/g" /opt/django/project1/project1/settings.py
 sed -i "s/'PASSWORD': 'P@ssw0rd1',/        'PASSWORD': 'P@ssw0rd1',/g" /opt/django/project1/project1/settings.py
-sed -i "s/'HOST': '10.138.0.6',/        'HOST': '10.138.0.6',/g" /opt/django/project1/project1/settings.py
+sed -i "s/'HOST': '10.138.0.7',/        'HOST': '10.138.0.7',/g" /opt/django/project1/project1/settings.py
 sed -i "s/'PORT': '5432',/        'PORT': '5432',/g" /opt/django/project1/project1/settings.py
 
 #prepare django for postgresql integration -- install postgres dev packages

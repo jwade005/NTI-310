@@ -28,7 +28,7 @@ echo "Creating firewall-rules..."
 gcloud compute firewall-rules create allow-http --description "Incoming http allowed." \
     --allow tcp:80
 
-gloud compute firewall-rules create allow-ldap --description "Incoming ldap allowed." \
+gcloud compute firewall-rules create allow-ldap --description "Incoming ldap allowed." \
     --allow tcp:636
 
 gcloud compute firewall-rules create allow-postgresql --description "Posgresql allowed." \

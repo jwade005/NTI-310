@@ -9,20 +9,18 @@ gcloud auth login jwade005@seattlecentral.edu --no-launch-browser
 #gcloud alpha projects create nti310-automation-9 \
 #    --name="NTI310 Automation"
 
-echo "Creating Configuration..."
-gcloud config configurations create auto2
 
 echo "Enabling billing..."
-gcloud alpha billing accounts projects link nti310-automation-123 --account-id=00CC7B-8C9651-1D73FA
+gcloud alpha billing accounts projects link nti310-automate-8 --account-id=00CC7B-8C9651-1D73FA
 
 echo "Setting admin account-id..."
 gcloud config set account jwade005@seattlecentral.edu
 
 echo "Setting the project for Configuration..."
-gcloud config set project nti310-automation-123
+gcloud config set project nti310-automate-8
 
 echo "Setting zone/region for Configuration..."
-gcloud config set compute/zone us-west1-a
+gcloud config set compute/zone us-west1-b
 
 gcloud config set compute/region us-west1
 
@@ -51,18 +49,17 @@ gcloud compute instances create rsyslog-server \
     --image-project centos-cloud \
     --machine-type f1-micro \
     --zone us-west1-a \
+    --scopes=370046799359-compute@developer.gserviceaccount.com=cloud-platform \
     --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/rsyslog-server-install.sh \
 
-
 echo "Creating ubuntu-client instance and running the install scripts..."
-gcloud compute instances create ubuntu-client \
+gcloud compute instances create ubuntu-client2 \
     --image-family ubuntu-1604-lts \
     --image-project ubuntu-os-cloud \
     --machine-type f1-micro \
     --zone us-west1-a \
-    --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/ldap-client-install.sh \
-
-
+    --scopes=370046799359-compute@developer.gserviceaccount.com=cloud-platform \
+    --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/ubuntu-client-install.sh \
 
 echo "Creating the ldap-server instance and running the install script..."
 gcloud compute instances create ldap-server \
@@ -71,7 +68,6 @@ gcloud compute instances create ldap-server \
     --machine-type f1-micro \
     --zone us-west1-a \
     --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/ldap-server-install.sh \
-
 
 echo "Creating the nfs-server and running the install script..."
 gcloud compute instances create nfs-server \

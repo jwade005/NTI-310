@@ -11,13 +11,13 @@ gcloud auth login jwade005@seattlecentral.edu --no-launch-browser
 
 
 echo "Enabling billing..."
-gcloud alpha billing accounts projects link nti310-automate-8 --account-id=00CC7B-8C9651-1D73FA
+gcloud alpha billing accounts projects link nti310-automate-9 --account-id=00CC7B-8C9651-1D73FA
 
 echo "Setting admin account-id..."
 gcloud config set account jwade005@seattlecentral.edu
 
 echo "Setting the project for Configuration..."
-gcloud config set project nti310-automate-8
+gcloud config set project nti310-automate-9
 
 echo "Setting zone/region for Configuration..."
 gcloud config set compute/zone us-west1-b

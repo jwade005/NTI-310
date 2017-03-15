@@ -21,12 +21,12 @@ git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
 git config --global user.name "jwade005"
 git config --global user.email "jwade005@seattlecentral.edu"
 
-ip1="gcloud compute instances list | grep ldap-server | awk '{print $4}'"
+ip1=$(gcloud compute instances list | grep ldap-server | awk '{print $4}')
 
 cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf #<-- ***adjust ldap.conf for ladps:/// and port 636
 cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
 sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
-sed -i 's|#BASE   dc=example,dc=com|BASE   dc=jwade,dc=local|g' /etc/ldap/ldap.conf
+sed -i 's,#BASE   dc=example\,dc=com,BASE   dc=jwade\,dc=local,g' /etc/ldap/ldap.conf
 sed -i 's,#URI    ldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI    ldaps:\/\/10.138.0.4,g' /etc/ldap/ldap.conf
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines

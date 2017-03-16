@@ -21,22 +21,28 @@ git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
 git config --global user.name "jwade005"
 git config --global user.email "jwade005@seattlecentral.edu"
 
-ip1=$(gcloud compute instances list | grep ldap-server | awk '{print $4}')
+apt-get --yes install debconf-utils
+debconf-get-selections | grep ^ldap >> debconf
+debconf-get-selections | grep ^nslcd >> debconf
+while read line; do echo "$line" | debconf-set-selections; done < debconf
 
-cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf #<-- ***adjust ldap.conf for ladps:/// and port 636
-cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
-sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
-sed -i 's,#BASE   dc=example\,dc=com,BASE   dc=jwade\,dc=local,g' /etc/ldap/ldap.conf
-sed -i 's,#URI    ldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI    ldaps:\/\/10.138.0.4,g' /etc/ldap/ldap.conf
+#cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf #<-- ***adjust ldap.conf for ladps:/// and port 636
+#cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
+#sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
+
+#adjust /etc/ldap/ldap.conf file for ip address and fqdn
+ip1=$(gcloud compute instances list | grep ldap-server | awk '{print $4}')
+sed -i "s,#URI\tldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI\tldaps:\/\/$ip1,g" /etc/ldap/ldap.conf
+sed -i 's/#BASE\tdc=example,dc=com/BASE\tdc=jwade,dc=local/g' /etc/ldap/ldap.conf
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 #vi /etc/nsswitch.conf #---use sed command
 
-sed -i 's,passwd:         compat,passwd:         ldap compat,g' /etc/nsswitch.conf
+sed -i 's,passwd:         compat,passwd:         compat ldap,g' /etc/nsswitch.conf
 #sed -i 's,passwd:         compat,passwd:         ldap compat' /etc/nsswitch.conf #*****FIX THIS
-sed -i 's,group:          compat,group:          ldap compat,g' /etc/nsswitch.conf
+sed -i 's,group:          compat,group:          compat ldap,g' /etc/nsswitch.conf
 #sed -i 's,group:          compat,group:          ldap compat' /etc/nsswitch.conf #*****FIX THIS
-sed -i 's,shadow:         compat,shadow:         ldap compat,g' /etc/nsswitch.conf
+sed -i 's,shadow:         compat,shadow:         compat ldap,g' /etc/nsswitch.conf
 #sed -i 's,shadow:         compat,shadow:         ldap compat' /etc/nsswitch.conf #*****FIX THIS
 
 #add this line to the bottom of the config file

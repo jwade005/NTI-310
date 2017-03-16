@@ -27,14 +27,16 @@ sed -i "s,#URI\tldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,U
 sed -i 's/#BASE\tdc=example,dc=com/BASE\tdc=jwade,dc=local/g' /etc/ldap/ldap.conf
 sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
 
-cp /tmp/NTI-310/config_scripts/debconf /etc/debconf
-sed -i "s,ldap-auth-config        ldap-auth-config\/ldapns\/ldap-server     string  ldaps:\/\/NEEDTOADDIP\/,ldap-auth-config        ldap-auth-config/ldapns/ldap-server     string  ldaps:\/\/$ip1\/,g" /etc/debconf
-sed -i "s,nslcd   nslcd/ldap-uris string  ldaps://NEEDTOADDIP/,nslcd   nslcd/ldap-uris string  ldaps://$ip1/,g" /etc/debconf
+#cp /tmp/NTI-310/config_scripts/debconf /etc/debconf
+#sed -i "s,ldap-auth-config        ldap-auth-config\/ldapns\/ldap-server     string  ldaps:\/\/NEEDTOADDIP\/,ldap-auth-config        ldap-auth-config/ldapns/ldap-server     string  ldaps:\/\/$ip1\/,g" /etc/debconf
+#sed -i "s,nslcd   nslcd/ldap-uris string  ldaps://NEEDTOADDIP/,nslcd   nslcd/ldap-uris string  ldaps://$ip1/,g" /etc/debconf
 
-while read line; do echo "$line" | debconf-set-selections; done < /etc/debconf
+#while read line; do echo "$line" | debconf-set-selections; done < /etc/debconf
 
-#cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf #<-- ***adjust ldap.conf for ladps:/// and port 636
-#cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
+cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf #<-- ***adjust ldap.conf for ladps:/// and port 636
+sed -i "s,uri ldaps:\/\/NEEDTOADDIP\/,uri ldaps:\/\/$ip1\/,g" /etc/ldap.conf
+cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
+sed -i "s,uri ldaps:\/\/NEEDTOADDIP\/,uri ldaps:\/\/$ip1\/,g" /etc/nslcd.conf
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 #vi /etc/nsswitch.conf #---use sed command

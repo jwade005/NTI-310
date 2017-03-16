@@ -3,16 +3,16 @@
 echo "This is jwade005's Gcloud Automation"
 
 echo "Authorizing jwade005 for this project..."
-gcloud auth login jwade005@seattlecentral.edu --no-launch-browser
+gcloud auth login wadejonathan005@gmail.com --no-launch-browser
 
 echo "Enabling billing..."
-gcloud alpha billing accounts projects link nti310-automate-18 --account-id=00CC7B-8C9651-1D73FA
+gcloud alpha billing accounts projects link nti310-auto-1 --account-id=00CB7D-C97746-2D8BC1
 
 echo "Setting admin account-id..."
-gcloud config set account jwade005@seattlecentral.edu
+gcloud config set account wadejonathan005@gmail.com
 
 echo "Setting the project for Configuration..."
-gcloud config set project nti310-automate-18
+gcloud config set project nti310-auto-1
 
 echo "Setting zone/region for Configuration..."
 gcloud config set compute/zone us-west1-b

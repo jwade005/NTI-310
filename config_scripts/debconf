@@ -1,0 +1,30 @@
+ldap-auth-config        ldap-auth-config/rootbindpw     password
+ldap-auth-config        ldap-auth-config/binddn string  cn=proxyuser,dc=example,dc=net
+ldap-auth-config        ldap-auth-config/dblogin        boolean false
+ldap-auth-config        ldap-auth-config/move-to-debconf        boolean true
+ldap-auth-config        ldap-auth-config/pam_password   select  md5
+ldap-auth-config        ldap-auth-config/ldapns/base-dn string  dc=jwade,dc=local
+ldap-auth-config        ldap-auth-config/ldapns/ldap-server     string  ldaps://NEEDTOADDIP/
+ldap-auth-config        ldap-auth-config/rootbinddn     string  cn=manager,dc=example,dc=net
+ldap-auth-config        ldap-auth-config/override       boolean true
+ldap-auth-config        ldap-auth-config/ldapns/ldap_version    select  3
+ldap-auth-config        ldap-auth-config/dbrootlogin    boolean false
+nslcd   nslcd/ldap-bindpw       password
+nslcd   nslcd/xdm-needs-restart error
+nslcd   nslcd/disable-screensaver       error
+nslcd   nslcd/ldap-base string  dc=jwade,dc=local
+nslcd   nslcd/restart-failed    error
+nslcd   nslcd/ldap-starttls     boolean false
+nslcd   nslcd/ldap-sasl-mech    select
+nslcd   nslcd/ldap-uris string  ldaps://NEEDTOADDIP/
+nslcd   nslcd/ldap-auth-type    select  none
+nslcd   nslcd/ldap-sasl-authzid string
+nslcd   libraries/restart-without-asking        boolean false
+nslcd   nslcd/ldap-sasl-krb5-ccname     string  /var/run/nslcd/nslcd.tkt
+nslcd   nslcd/ldap-sasl-secprops        string
+nslcd   nslcd/ldap-reqcert      select  try
+nslcd   nslcd/ldap-binddn       string
+nslcd   nslcd/ldap-cacertfile   string  /etc/ssl/certs/ca-certificates.crt
+nslcd   nslcd/ldap-sasl-authcid string
+nslcd   nslcd/restart-services  string
+nslcd   nslcd/ldap-sasl-realm   string

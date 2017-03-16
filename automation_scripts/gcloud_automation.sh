@@ -6,13 +6,13 @@ echo "Authorizing jwade005 for this project..."
 gcloud auth login wadejonathan005@gmail.com --no-launch-browser
 
 echo "Enabling billing..."
-gcloud alpha billing accounts projects link nti310-auto-4 --account-id=00CB7D-C97746-2D8BC1
+gcloud alpha billing accounts projects link nti310-auto-5 --account-id=00CB7D-C97746-2D8BC1
 
 echo "Setting admin account-id..."
 gcloud config set account wadejonathan005@gmail.com
 
 echo "Setting the project for Configuration..."
-gcloud config set project nti310-auto-4
+gcloud config set project nti310-auto-5
 
 echo "Setting zone/region for Configuration..."
 gcloud config set compute/zone us-west1-b

@@ -117,4 +117,6 @@ echo "*.info;mail.none;authpriv.none;cron.none    @$ip" >> /etc/rsyslog.conf
 #sudo echo "*.info;mail.none;authpriv.none;cron.none    @rsyslog-server" >> /etc/rsyslog.conf
 sudo service rsyslog restart                                     #ubuntu command
 
-reboot
+systemctl restart sshd
+systemctl restart nslcd
+systemctl restart systemd-logind.service

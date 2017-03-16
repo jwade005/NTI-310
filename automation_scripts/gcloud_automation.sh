@@ -5,11 +5,6 @@ echo "This is jwade005's Gcloud Automation"
 echo "Authorizing jwade005 for this project..."
 gcloud auth login jwade005@seattlecentral.edu --no-launch-browser
 
-#echo "Creating the project..."
-#gcloud alpha projects create nti310-automate-14 \
-#    --name="NTI310 Automation"
-#    --scopes cloud-platform
-
 echo "Enabling billing..."
 gcloud alpha billing accounts projects link nti310-automate-15 --account-id=00CC7B-8C9651-1D73FA
 
@@ -51,8 +46,24 @@ gcloud compute instances create rsyslog-server \
     --scopes cloud-platform \
     --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/rsyslog-server-install.sh \
 
-echo "Creating ubuntu-client instance and running the install scripts..."
-gcloud compute instances create ubuntu-client \
+echo "Creating ubuntu-client-a instance and running the install scripts..."
+gcloud compute instances create ubuntu-client-a \
+    --image-family ubuntu-1604-lts \
+    --image-project ubuntu-os-cloud \
+    --machine-type f1-micro \
+    --scopes cloud-platform \
+    --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/ubuntu-client-install.sh \
+
+echo "Creating ubuntu-client-b instance and running the install scripts..."
+gcloud compute instances create ubuntu-client-b \
+    --image-family ubuntu-1604-lts \
+    --image-project ubuntu-os-cloud \
+    --machine-type f1-micro \
+    --scopes cloud-platform \
+    --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/ubuntu-client-install.sh \
+
+echo "Creating ubuntu-client-c instance and running the install scripts..."
+gcloud compute instances create ubuntu-client-c \
     --image-family ubuntu-1604-lts \
     --image-project ubuntu-os-cloud \
     --machine-type f1-micro \
@@ -123,4 +134,4 @@ gcloud compute instances create django-c-production \
     --scopes cloud-platform \
     --metadata-from-file startup-script=/Users/Jonathan/desktop/NTI310/NTI-310/automation_scripts/django-production-install.sh \
 
-echo "Google Cloud Project nti310-auto-8 Installation Complete. :)"
+echo "Jwade005's Google Cloud Final Project Automatic Installation Complete. :)"

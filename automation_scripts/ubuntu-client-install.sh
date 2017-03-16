@@ -13,7 +13,7 @@ apt-get --yes update && apt-get --yes upgrade && apt-get --yes dist-upgrade
 
 export DEBIAN_FRONTEND=noninteractive       #******how to skip the autoconfig*******
 #apt-get --yes install libpam-ldap nscd  #ldap-auth-client
-apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd
+apt-get --yes install libnss-ldap libpam-ldap ldap-utils nslcd debconf-utils
 unset DEBIAN_FRONTEND
 
 echo "Cloning jwade005's NTI-310 GitHub..."
@@ -21,19 +21,20 @@ git clone https://github.com/jwade005/NTI-310.git /tmp/NTI-310
 git config --global user.name "jwade005"
 git config --global user.email "jwade005@seattlecentral.edu"
 
-apt-get --yes install debconf-utils
-debconf-get-selections | grep ^ldap >> debconf
-debconf-get-selections | grep ^nslcd >> debconf
-while read line; do echo "$line" | debconf-set-selections; done < debconf
-
-#cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf #<-- ***adjust ldap.conf for ladps:/// and port 636
-#cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
-#sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
-
 #adjust /etc/ldap/ldap.conf file for ip address and fqdn
 ip1=$(gcloud compute instances list | grep ldap-server | awk '{print $4}')
 sed -i "s,#URI\tldap:\/\/ldap.example.com ldap:\/\/ldap-master.example.com:666,URI\tldaps:\/\/$ip1,g" /etc/ldap/ldap.conf
 sed -i 's/#BASE\tdc=example,dc=com/BASE\tdc=jwade,dc=local/g' /etc/ldap/ldap.conf
+sed -i -e '$aTLS_REQCERT allow' /etc/ldap/ldap.conf
+
+cp /tmp/NTI-310/config_scripts/debconf /etc/debconf
+sed -i "s,ldap-auth-config        ldap-auth-config\/ldapns\/ldap-server     string  ldaps:\/\/NEEDTOADDIP\/,ldap-auth-config        ldap-auth-config/ldapns/ldap-server     string  ldaps:\/\/$ip1\/,g" /etc/debconf
+sed -i "s,nslcd   nslcd/ldap-uris string  ldaps://NEEDTOADDIP/,nslcd   nslcd/ldap-uris string  ldaps://$ip1/,g" /etc/debconf
+
+while read line; do echo "$line" | debconf-set-selections; done < /etc/debconf
+
+#cp /tmp/NTI-310/config_scripts/ldap.conf /etc/ldap.conf #<-- ***adjust ldap.conf for ladps:/// and port 636
+#cp /tmp/NTI-310/config_scripts/nslcd.conf /etc/nslcd.conf
 
 #edit the /etc/nsswitch.conf file - add 'ldap' to these lines
 #vi /etc/nsswitch.conf #---use sed command

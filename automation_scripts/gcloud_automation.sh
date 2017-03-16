@@ -19,9 +19,6 @@ gcloud config set compute/zone us-west1-b
 
 gcloud config set compute/region us-west1
 
-echo "Sleep for 60 to allow the compute engine to get the project ready..."
-sleep 60
-
 echo "Creating firewall-rules..."
 gcloud compute firewall-rules create allow-http --description "Incoming http allowed." \
     --allow tcp:80
